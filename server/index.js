@@ -10,6 +10,7 @@ import signatureDishesRoutes from './Routes/SignatureDishesRoutes.js';
 import menuRoutes from './Routes/menuRoutes.js';
 import reservationRoutes from './Routes/reservationRoutes.js';
 import tableRoutes from './Routes/TableRoutes.js';
+import destinationRoutes from './Routes/Destinationroutes.js';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use('/api/signature-dishes', signatureDishesRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/reservations', reservationRoutes); 
 app.use('/api/tables', tableRoutes);
+app.use('/api/destinations', destinationRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
