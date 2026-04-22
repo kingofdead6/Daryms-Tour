@@ -19,55 +19,38 @@ export default function Login() {
 
   const validate = () => {
     const e = {};
-
     if (!email.trim()) e.email = "Email is required";
-    else if (!/^\S+@\S+\.\S+$/.test(email))
-      e.email = "Invalid email format";
-
+    else if (!/^\S+@\S+\.\S+$/.test(email)) e.email = "Invalid email format";
     if (!password) e.password = "Password is required";
-    else if (password.length < 6)
-      e.password = "Password must be at least 6 characters";
-
+    else if (password.length < 6) e.password = "Password must be at least 6 characters";
     return e;
   };
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-
     const validationErrors = validate();
     setErrors(validationErrors);
-
     if (Object.keys(validationErrors).length > 0) return;
-
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/auth/login`,
-        { email, password }
-      );
-
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
       const { token, usertype } = response.data;
-
       if (remember) {
         localStorage.setItem("token", token);
       } else {
         sessionStorage.setItem("token", token);
       }
-
       window.dispatchEvent(new Event("authChanged"));
       setErrors({});
-
       toast.success("Login successful");
-
       if (usertype === "admin" || usertype === "superadmin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/");
       }
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Something went wrong";
+      const message = error.response?.data?.message || "Something went wrong";
       setErrors({ form: message });
       toast.error(message);
     } finally {
@@ -76,7 +59,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-20 bg-[#0c0a08]">
+    <div className="min-h-screen flex items-center justify-center px-4 py-20 bg-[#F8FAFC]">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -85,18 +68,18 @@ export default function Login() {
       >
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-5xl font-light tracking-widest text-stone-100">
+          <h1 className="text-5xl font-bold tracking-tight text-[#0F172A]">
             Welcome Back
           </h1>
-          <p className="mt-4 text-stone-400 font-light">
-            Sign in to your account
+          <p className="mt-4 text-[#475569] font-light">
+            Sign in to continue your journey
           </p>
         </div>
 
         {/* Card */}
-        <div className="bg-[#11100e] border border-stone-800 rounded-3xl shadow-2xl p-10">
+        <div className="bg-[#FFFFFF] border border-slate-200 rounded-3xl shadow-xl p-10">
           {errors.form && (
-            <div className="mb-6 p-4 bg-red-950/40 border border-red-800 text-red-300 rounded-xl text-center text-sm">
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-center text-sm">
               {errors.form}
             </div>
           )}
@@ -104,12 +87,12 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-7">
             {/* Email */}
             <div>
-              <label className="block text-sm text-stone-300 mb-2">
+              <label className="block text-sm font-semibold text-[#475569] mb-2">
                 Email
               </label>
 
               <div className="relative">
-                <div className="absolute inset-y-0 left-4 flex items-center text-stone-500">
+                <div className="absolute inset-y-0 left-4 flex items-center text-[#475569]">
                   <FaUser />
                 </div>
 
@@ -118,16 +101,14 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className={`w-full pl-12 pr-4 py-4 rounded-xl bg-[#0c0a08] border ${
-                    errors.email
-                      ? "border-red-700"
-                      : "border-stone-700"
-                  } text-stone-200 focus:outline-none focus:border-amber-400`}
+                  className={`w-full pl-12 pr-4 py-4 rounded-xl bg-[#F8FAFC] border ${
+                    errors.email ? "border-red-500" : "border-slate-200"
+                  } text-[#0F172A] focus:outline-none focus:border-[#1E88E5] transition-colors`}
                 />
               </div>
 
               {errors.email && (
-                <p className="mt-2 text-sm text-red-400">
+                <p className="mt-2 text-sm text-red-500">
                   {errors.email}
                 </p>
               )}
@@ -135,12 +116,12 @@ export default function Login() {
 
             {/* Password */}
             <div>
-              <label className="block text-sm text-stone-300 mb-2">
+              <label className="block text-sm font-semibold text-[#475569] mb-2">
                 Password
               </label>
 
               <div className="relative">
-                <div className="absolute inset-y-0 left-4 flex items-center text-stone-500">
+                <div className="absolute inset-y-0 left-4 flex items-center text-[#475569]">
                   <FaLock />
                 </div>
 
@@ -149,24 +130,22 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className={`w-full pl-12 pr-12 py-4 rounded-xl bg-[#0c0a08] border ${
-                    errors.password
-                      ? "border-red-700"
-                      : "border-stone-700"
-                  } text-stone-200 focus:outline-none focus:border-amber-400`}
+                  className={`w-full pl-12 pr-12 py-4 rounded-xl bg-[#F8FAFC] border ${
+                    errors.password ? "border-red-500" : "border-slate-200"
+                  } text-[#0F172A] focus:outline-none focus:border-[#1E88E5] transition-colors`}
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-4 flex items-center text-stone-500 hover:text-amber-400"
+                  className="absolute inset-y-0 right-4 flex items-center text-[#475569] hover:text-[#00A896]"
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
 
               {errors.password && (
-                <p className="mt-2 text-sm text-red-400">
+                <p className="mt-2 text-sm text-red-500">
                   {errors.password}
                 </p>
               )}
@@ -178,10 +157,17 @@ export default function Login() {
               disabled={loading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-4 bg-amber-500 text-black font-semibold rounded-2xl hover:bg-amber-400 transition shadow-lg disabled:opacity-50"
+              className="w-full py-4 bg-[#1E88E5] text-white font-bold rounded-2xl hover:bg-[#1565C0] transition-all shadow-lg shadow-blue-200 disabled:bg-[#475569] disabled:opacity-50"
             >
               {loading ? "Signing in..." : "Sign in"}
             </motion.button>
+
+            {/* Optional Accent Link for Travel Feel */}
+            <div className="text-center">
+                <p className="text-sm text-[#475569]">
+                    Don't have an account? <span className="text-[#00A896] cursor-pointer font-bold">Register</span>
+                </p>
+            </div>
           </form>
         </div>
       </motion.div>

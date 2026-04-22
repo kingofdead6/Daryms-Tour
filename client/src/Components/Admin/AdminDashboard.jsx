@@ -62,6 +62,11 @@ export default function AdminDashboard() {
       title: "Manage Reservations",
       description: "View and manage customer reservations"
     },
+    {
+      path: "/admin/destinations",
+      title: "Manage Destinations",
+      description: "Add, edit, or remove travel destinations"
+    }
   ];
 
   const superadminSections = [

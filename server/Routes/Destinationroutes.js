@@ -8,7 +8,9 @@ import {
   updateDestination,
   toggleVisibility,
   deleteDestination,
-} from "../Controllers/destinationController.js";
+  getPopularDestinations,
+  togglePopular,
+} from "../Controllers/Destinationcontroller.js";
 
 const router = express.Router();
 
@@ -26,12 +28,17 @@ const upload = multer({
   },
 });
 
+router.get("/popular", getPopularDestinations);   
+
+router.patch("/:id/popular", togglePopular);
 // ─── Public ────────────────────────────────────────────────────────────────
 // GET /api/destinations          → visible destinations only
 router.get("/", getDestinations);
 
 // GET /api/destinations/:id      → single destination
 router.get("/:id", getDestinationById);
+
+
 
 // ─── Admin ─────────────────────────────────────────────────────────────────
 // GET  /api/destinations/admin/all        → all destinations (incl. hidden)
@@ -48,5 +55,7 @@ router.patch("/:id/visibility", toggleVisibility);
 
 // DELETE /api/destinations/:id            → delete
 router.delete("/:id", deleteDestination);
+
+
 
 export default router;

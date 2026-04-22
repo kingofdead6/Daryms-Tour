@@ -27,6 +27,7 @@ import DestinationsPage from "./Components/Destination/DestinationsPage";
 import DestinationDetails from "./Components/Destination/DestinationDetails";
 import PackagesPage from "./Pages/Packages";
 import BookingPage from "./Pages/Booking";
+import DestinationsAdmin from "./Components/Admin/AdminDestinations";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
           <Route path="/admin/menu" element={<AdminMenu />} />
           <Route path="/admin/tables" element={<AdminTables />} />
           <Route path="/admin/reservations" element={<AdminReservations />} />
+          <Route path="/admin/destinations" element={<DestinationsAdmin />} />
         </Route>
 
         {/* 404 Route */}

@@ -127,3 +127,30 @@ export const deleteDestination = asyncHandler(async (req, res) => {
   await Destination.findByIdAndDelete(req.params.id);
   res.status(200).json({ message: "Destination deleted successfully" });
 });
+export const togglePopular = asyncHandler(async (req, res) => {
+  const destination = await Destination.findById(req.params.id);
+ 
+  if (!destination) {
+    res.status(404);
+    throw new Error("Destination not found");
+  }
+ 
+  destination.isPopular = !destination.isPopular;
+  await destination.save();
+  res.status(200).json(destination);
+});
+ 
+// Also add a public route to get popular destinations only:
+ 
+// @desc    Get popular destinations (public)
+// @route   GET /api/destinations/popular
+// @access  Public
+export const getPopularDestinations = asyncHandler(async (req, res) => {
+  const destinations = await Destination.find({
+    isPopular: true,
+    isVisible: true,
+  }).sort({ createdAt: -1 });
+ 
+  res.status(200).json(destinations);
+});
+ 
