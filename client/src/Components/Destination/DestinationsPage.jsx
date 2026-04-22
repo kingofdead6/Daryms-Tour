@@ -156,7 +156,7 @@ export default function DestinationsPage() {
                                 >
                                     <div className="relative h-64 overflow-hidden">
                                         <img
-                                            src={dest.image}
+                                            src={Array.isArray(dest.image) ? dest.image[0] : dest.image}
                                             alt={dest.name}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
@@ -177,6 +177,11 @@ export default function DestinationsPage() {
                                                         {dest.country}, {dest.continent}
                                                     </span>
                                                 </div>
+                                                {dest.description && (
+                                                    <p className="text-sm text-[#475569] mt-2">
+                                                        {dest.description.length > 100 ? dest.description.substring(0, 100) + "..." : dest.description}
+                                                    </p>
+                                                )}
                                             </div>
                                             <p className="text-2xl font-bold text-[#FF6B35]">
                                                 ${dest.price.toLocaleString()}

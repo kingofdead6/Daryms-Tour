@@ -7,6 +7,23 @@ const destinationSchema = new mongoose.Schema(
       required: [true, "Destination name is required"],
       trim: true,
     },
+    description: {
+        type: String,
+        trim: true,
+    },
+    duration: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    guided: {
+        type: Boolean,
+        default: false
+    },
+    includes: {
+        type: [String],
+        default: []
+    },
     country: {
       type: String,
       required: [true, "Country is required"],
@@ -23,7 +40,7 @@ const destinationSchema = new mongoose.Schema(
       min: [0, "Price cannot be negative"],
     },
     image: {
-      type: String,
+      type: [String],
       required: [true, "Destination image is required"],
     },
     type: {

@@ -2,23 +2,24 @@ import asyncHandler from "express-async-handler";
 import Destination from "../Models/Destination.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
 
-// @desc    Create a destination
-// @route   POST /api/destinations
-// @access  Admin
+
 export const createDestination = asyncHandler(async (req, res) => {
-  const { name, country, continent, price, type, isVisible } = req.body;
+  const { name, country, continent, price, type, isVisible, description, duration, guided, includes } = req.body;
 
   if (!name || !country || !continent || !price || !type) {
     res.status(400);
     throw new Error("Name, Country, Continent, Price, and Type are required");
   }
 
-  let imageUrl = null;
-  if (req.file) {
-    imageUrl = await uploadToCloudinary(req.file);
+  let imageUrls = [];
+  if (req.files && req.files.length > 0) {
+    for (const file of req.files) {
+      const url = await uploadToCloudinary(file);
+      imageUrls.push(url);
+    }
   } else {
     res.status(400);
-    throw new Error("A destination image is required");
+    throw new Error("At least one destination image is required");
   }
 
   const destination = await Destination.create({
@@ -27,8 +28,12 @@ export const createDestination = asyncHandler(async (req, res) => {
     continent,
     price: Number(price),
     type,
-    image: imageUrl,
+    image: imageUrls,
     isVisible: isVisible === "true" || isVisible === true,
+    description: description?.trim() || '',
+    duration: duration?.trim() || '',
+    guided: guided === 'true' || guided === true,
+    includes: includes ? JSON.parse(includes) : [],
   });
 
   res.status(201).json(destination);
@@ -75,11 +80,15 @@ export const updateDestination = asyncHandler(async (req, res) => {
     throw new Error("Destination not found");
   }
 
-  const { name, country, continent, price, type, isVisible } = req.body;
+  const { name, country, continent, price, type, isVisible, description, duration, guided, includes } = req.body;
 
-  let imageUrl = destination.image;
-  if (req.file) {
-    imageUrl = await uploadToCloudinary(req.file);
+  let imageUrls = destination.image;
+  if (req.files && req.files.length > 0) {
+    imageUrls = [];
+    for (const file of req.files) {
+      const url = await uploadToCloudinary(file);
+      imageUrls.push(url);
+    }
   }
 
   destination.name = name?.trim() || destination.name;
@@ -87,11 +96,15 @@ export const updateDestination = asyncHandler(async (req, res) => {
   destination.continent = continent || destination.continent;
   destination.price = price ? Number(price) : destination.price;
   destination.type = type || destination.type;
-  destination.image = imageUrl;
+  destination.image = imageUrls;
   destination.isVisible =
     isVisible !== undefined
       ? isVisible === "true" || isVisible === true
       : destination.isVisible;
+  destination.description = description?.trim() || destination.description;
+  destination.duration = duration?.trim() || destination.duration;
+  destination.guided = guided !== undefined ? (guided === 'true' || guided === true) : destination.guided;
+  destination.includes = includes ? JSON.parse(includes) : destination.includes;
 
   const updated = await destination.save();
   res.status(200).json(updated);

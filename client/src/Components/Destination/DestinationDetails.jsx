@@ -35,10 +35,10 @@ export default function DestinationDetails() {
         fetchDestination();
     }, [id, navigate]);
 
-    // Hero slideshow — use destination image + 2 generic fallback panoramas
+    // Hero slideshow — use destination images + 2 generic fallback panoramas
     const heroImages = destination
         ? [
-              destination.image,
+              ...(Array.isArray(destination.image) ? destination.image : [destination.image]),
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1200",
               "https://images.unsplash.com/photo-1469796466635-455ede02891d?q=80&w=1200",
           ]
@@ -165,19 +165,15 @@ export default function DestinationDetails() {
                             </h2>
 
                             <p className="text-[#475569] text-lg leading-relaxed mb-10">
-                                Discover the beauty of {destination.country}, located in {destination.continent}.
-                                This {destination.type.toLowerCase()} experience is designed for travelers
-                                looking for unforgettable moments and premium comfort. Each itinerary is carefully
-                                curated to give you the perfect balance of adventure, culture, and relaxation.
+                                {destination.description || "Discover the beauty of this destination."}
                             </p>
 
-                            {/* INFO GRID */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-12">
                                 {[
-                                    { icon: <Clock className="text-[#1E88E5] mb-2" />, label: "Duration", value: "7 Days" },
+                                    { icon: <Clock className="text-[#1E88E5] mb-2" />, label: "Duration", value: destination.duration || "N/A" },
                                     { icon: <Users className="text-[#00A896] mb-2" />, label: "Group Size", value: "Up to 12" },
                                     { icon: <Info className="text-[#1E88E5] mb-2" />, label: "Type", value: destination.type },
-                                    { icon: <CheckCircle className="text-[#00A896] mb-2" />, label: "Guided", value: "Yes" },
+                                    { icon: <CheckCircle className="text-[#00A896] mb-2" />, label: "Guided", value: destination.guided ? "Yes" : "No" },
                                 ].map(({ icon, label, value }) => (
                                     <motion.div
                                         key={label}
@@ -198,14 +194,14 @@ export default function DestinationDetails() {
                             </h3>
 
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                                {[
+                                {(destination.includes && destination.includes.length > 0 ? destination.includes : [
                                     "5-star Hotel Accommodation",
                                     "Daily Breakfast & Dinner",
                                     "Airport Transfers",
                                     "Guided City Tours",
                                     "Private Boat Trip",
                                     "Entry to Archaeological Sites",
-                                ].map((item, i) => (
+                                ]).map((item, i) => (
                                     <motion.li
                                         key={item}
                                         initial={{ opacity: 0, x: -10 }}

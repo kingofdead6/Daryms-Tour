@@ -45,7 +45,7 @@ router.get("/:id", getDestinationById);
 router.get("/admin/all", getAllDestinationsAdmin);
 
 // POST /api/destinations                  → create with image upload
-router.post("/", upload.single("image"), createDestination);
+router.post("/", upload.array("images", 10), createDestination);
 
 // PUT  /api/destinations/:id              → update (image optional)
 router.put("/:id", upload.single("image"), updateDestination);

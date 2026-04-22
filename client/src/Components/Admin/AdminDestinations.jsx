@@ -18,6 +18,7 @@ const TYPES = ["Luxury", "Cultural", "Safari", "Adventure", "Historical", "Beach
 const emptyForm = {
     name: "", country: "", continent: "Europe",
     price: "", type: "Luxury", isVisible: true,
+    description: "", duration: "", guided: false, includes: [],
 };
 
 // ─── Form Modal ────────────────────────────────────────────────────────────
@@ -32,18 +33,21 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
                   price: destination.price,
                   type: destination.type,
                   isVisible: destination.isVisible,
+                  description: destination.description || "",
+                  duration: destination.duration || "",
+                  guided: destination.guided || false,
+                  includes: destination.includes || [],
               }
             : emptyForm
     );
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(mode === "edit" ? destination?.image : null);
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState(mode === "edit" ? (destination?.image || []) : []);
     const [submitting, setSubmitting] = useState(false);
 
     const handleFile = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        setSelectedImage(file);
-        setImagePreview(URL.createObjectURL(file));
+        const files = Array.from(e.target.files);
+        setSelectedImages(files);
+        setImagePreviews(files.map(file => URL.createObjectURL(file)));
     };
 
     const handleSubmit = async () => {
@@ -51,8 +55,8 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
             toast.error("Name, country and price are required");
             return;
         }
-        if (mode === "create" && !selectedImage) {
-            toast.error("Please upload a destination image");
+        if (mode === "create" && (!selectedImages || selectedImages.length === 0)) {
+            toast.error("Please upload at least one destination image");
             return;
         }
         setSubmitting(true);
@@ -63,7 +67,15 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
         fd.append("price", form.price);
         fd.append("type", form.type);
         fd.append("isVisible", form.isVisible);
-        if (selectedImage) fd.append("image", selectedImage);
+        fd.append("description", form.description);
+        fd.append("duration", form.duration);
+        fd.append("guided", form.guided);
+        fd.append("includes", JSON.stringify(form.includes)); // since it's array
+        if (selectedImages && selectedImages.length > 0) {
+            selectedImages.forEach((image, index) => {
+                fd.append("images", image);
+            });
+        }
 
         try {
             if (mode === "create") {
@@ -109,20 +121,27 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
                         className="relative h-48 rounded-3xl border-2 border-dashed border-amber-900/30 hover:border-amber-400/50 transition-colors cursor-pointer overflow-hidden group"
                         onClick={() => fileRef.current.click()}
                     >
-                        {imagePreview ? (
-                            <>
-                                <img src={imagePreview} alt="" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        {imagePreviews.length > 0 ? (
+                            <div className="flex space-x-2 h-full">
+                                {imagePreviews.slice(0, 3).map((preview, index) => (
+                                    <img key={index} src={preview} alt="" className="w-full h-full object-cover rounded-3xl" />
+                                ))}
+                                {imagePreviews.length > 3 && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-3xl">
+                                        <span className="text-white text-lg font-bold">+{imagePreviews.length - 3} more</span>
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-3xl">
                                     <Upload className="text-white" size={28} />
                                 </div>
-                            </>
+                            </div>
                         ) : (
                             <div className="flex flex-col items-center justify-center h-full text-amber-100/30 group-hover:text-amber-400 transition-colors">
                                 <Upload size={28} className="mb-2" />
-                                <p className="text-xs uppercase tracking-widest">Upload Destination Image</p>
+                                <p className="text-xs uppercase tracking-widest">Upload Destination Images</p>
                             </div>
                         )}
-                        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+                        <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={handleFile} />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -169,6 +188,31 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
                                 <option value="false">Save as Draft</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div>
+                        <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Description</label>
+                        <textarea className={inputCls} placeholder="Describe the destination..." value={form.description}
+                            onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} rows={3} />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Duration</label>
+                            <input className={inputCls} placeholder="e.g. 7 days" value={form.duration}
+                                onChange={(e) => setForm((f) => ({ ...f, duration: e.target.value }))} />
+                        </div>
+                        <div className="flex items-center">
+                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1 mr-4">Guided Tour</label>
+                            <input type="checkbox" checked={form.guided}
+                                onChange={(e) => setForm((f) => ({ ...f, guided: e.target.checked }))} />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Includes (comma separated)</label>
+                        <textarea className={inputCls} placeholder="e.g. Accommodation, Meals, Transport" value={form.includes.join(', ')}
+                            onChange={(e) => setForm((f) => ({ ...f, includes: e.target.value.split(',').map(s => s.trim()).filter(s => s) }))} rows={2} />
                     </div>
 
                     <button
