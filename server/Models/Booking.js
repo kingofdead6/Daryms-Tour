@@ -137,7 +137,7 @@ const bookingSchema = new mongoose.Schema(
 );
 
 // Auto-generate reference code before saving
-bookingSchema.pre("save", function (next) {
+bookingSchema.pre("save", async function () {
   if (!this.referenceCode) {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let code = "BK-";
@@ -146,7 +146,6 @@ bookingSchema.pre("save", function (next) {
     }
     this.referenceCode = code;
   }
-  next();
 });
 
 const Booking = mongoose.model("Booking", bookingSchema);

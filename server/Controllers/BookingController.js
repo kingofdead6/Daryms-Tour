@@ -1,9 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Booking from "../Models/Booking.js";
 
-// @desc    Create a booking
-// @route   POST /api/bookings
-// @access  Public
+
 export const createBooking = asyncHandler(async (req, res) => {
   const {
     bookingType, destination, package: pkg,
@@ -14,7 +12,8 @@ export const createBooking = asyncHandler(async (req, res) => {
     specialRequests, dietaryRequirements, roomType,
     paymentMethod,
   } = req.body;
-
+    console.log("=== CREATE BOOKING REQUEST ===");
+    console.log("BODY:", req.body);
   if (!bookingType || !firstName || !lastName || !email || !phone || !departureDate || !pricePerPerson) {
     res.status(400);
     throw new Error("Missing required booking fields");
@@ -39,7 +38,8 @@ export const createBooking = asyncHandler(async (req, res) => {
   const taxes = Math.round(subtotal * 0.05); // 5% tax
   const totalAmount = subtotal + taxes;
 
-  const booking = await Booking.create({
+try {
+  booking = await Booking.create({
     bookingType,
     destination: bookingType === "destination" ? destination : null,
     package: bookingType === "package" ? pkg : null,
@@ -66,6 +66,12 @@ export const createBooking = asyncHandler(async (req, res) => {
     paymentStatus: "unpaid",
   });
 
+  console.log("✅ Booking created:", booking._id);
+
+} catch (err) {
+  console.error("❌ FULL ERROR:", err);
+  throw err;
+}
   // Populate for response
   const populated = await Booking.findById(booking._id)
     .populate("destination", "name country image price")
@@ -74,9 +80,7 @@ export const createBooking = asyncHandler(async (req, res) => {
   res.status(201).json(populated);
 });
 
-// @desc    Get all bookings (admin)
-// @route   GET /api/bookings/admin/all
-// @access  Admin
+
 export const getAllBookingsAdmin = asyncHandler(async (req, res) => {
   const { status, paymentStatus, bookingType, search } = req.query;
 
@@ -101,9 +105,7 @@ export const getAllBookingsAdmin = asyncHandler(async (req, res) => {
   res.status(200).json(bookings);
 });
 
-// @desc    Get a booking by ID
-// @route   GET /api/bookings/:id
-// @access  Admin / Owner
+
 export const getBookingById = asyncHandler(async (req, res) => {
   const booking = await Booking.findById(req.params.id)
     .populate("destination", "name country continent image price duration type")
@@ -117,9 +119,7 @@ export const getBookingById = asyncHandler(async (req, res) => {
   res.status(200).json(booking);
 });
 
-// @desc    Get booking by reference code (public lookup)
-// @route   GET /api/bookings/reference/:code
-// @access  Public
+
 export const getBookingByReference = asyncHandler(async (req, res) => {
   const booking = await Booking.findOne({ referenceCode: req.params.code })
     .populate("destination", "name country continent image price duration type")
@@ -133,9 +133,7 @@ export const getBookingByReference = asyncHandler(async (req, res) => {
   res.status(200).json(booking);
 });
 
-// @desc    Update booking status
-// @route   PATCH /api/bookings/:id/status
-// @access  Admin
+
 export const updateBookingStatus = asyncHandler(async (req, res) => {
   const { status } = req.body;
   const booking = await Booking.findById(req.params.id);
@@ -158,9 +156,7 @@ export const updateBookingStatus = asyncHandler(async (req, res) => {
   res.status(200).json(updated);
 });
 
-// @desc    Update payment status
-// @route   PATCH /api/bookings/:id/payment
-// @access  Admin
+
 export const updatePaymentStatus = asyncHandler(async (req, res) => {
   const { paymentStatus } = req.body;
   const booking = await Booking.findById(req.params.id);
@@ -183,9 +179,7 @@ export const updatePaymentStatus = asyncHandler(async (req, res) => {
   res.status(200).json(updated);
 });
 
-// @desc    Update admin notes
-// @route   PATCH /api/bookings/:id/notes
-// @access  Admin
+
 export const updateAdminNotes = asyncHandler(async (req, res) => {
   const { adminNotes } = req.body;
   const booking = await Booking.findById(req.params.id);
@@ -198,9 +192,6 @@ export const updateAdminNotes = asyncHandler(async (req, res) => {
   res.status(200).json(booking);
 });
 
-// @desc    Delete a booking
-// @route   DELETE /api/bookings/:id
-// @access  Admin
 export const deleteBooking = asyncHandler(async (req, res) => {
   const booking = await Booking.findById(req.params.id);
   if (!booking) { res.status(404); throw new Error("Booking not found"); }
@@ -208,9 +199,7 @@ export const deleteBooking = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Booking deleted" });
 });
 
-// @desc    Get booking stats
-// @route   GET /api/bookings/admin/stats
-// @access  Admin
+
 export const getBookingStats = asyncHandler(async (req, res) => {
   const total = await Booking.countDocuments();
   const pending = await Booking.countDocuments({ status: "pending" });
