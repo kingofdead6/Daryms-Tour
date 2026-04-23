@@ -42,11 +42,11 @@ export default function ScrollToTopButton() {
             flex items-center justify-center
 
             rounded-full
-            bg-amber-500 text-black
-            shadow-lg shadow-black/40
+            bg-[#1E88E5] text-white
+            shadow-lg shadow-blue-900/30
 
-            hover:bg-amber-400 active:scale-95
-            transition
+            hover:bg-[#00A896] active:scale-95
+            transition-colors duration-300
 
             cursor-pointer
             select-none
@@ -56,7 +56,7 @@ export default function ScrollToTopButton() {
             mr-[env(safe-area-inset-right)]
           "
         >
-          <ArrowUp size={22} />
+          <ArrowUp size={22} strokeWidth={2.5} />
         </motion.button>
       )}
     </AnimatePresence>

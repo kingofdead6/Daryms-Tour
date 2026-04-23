@@ -355,17 +355,22 @@ export default function DestinationDetails() {
                             </div>
 
                             <button
-                                onClick={() => {
-                                    if (!date) {
-                                        toast.warn("Please select a departure date");
-                                        return;
-                                    }
-                                    toast.success("Booking request sent!");
-                                }}
+                               onClick={() => {
+  if (!date) {
+    toast.warn("Please select a departure date");
+    return;
+  }
+
+  navigate(
+    `/booking?type=destination&id=${destination._id}&price=${destination.price}&title=${encodeURIComponent(destination.name)}&date=${date}&travelers=${travelers}`
+  );
+}}
+                                   
                                 className="cursor-pointer w-full py-4 bg-[#FF6B35] text-white font-bold rounded-xl shadow-lg shadow-orange-200/60 hover:bg-[#e85a24] transition-all active:scale-95"
                             >
                                 Proceed to Checkout
                             </button>
+                            
 
                             <p className="text-center text-xs text-[#475569] mt-4">
                                 No payment charged yet · Free cancellation 48h before
