@@ -19,9 +19,10 @@ import DestinationDetails from "./Components/Destination/DestinationDetails";
 import BookingPage from "./Pages/Booking";
 import DestinationsAdmin from "./Components/Admin/AdminDestinations";
 import PackagesPage from "./Components/Package/Packages";
-import PackagesDetails from "./Components/Package/PackageDetails";
+import PackagesDetails from "./Components/Package/Packagedetails";
 import PackagesAdmin from "./Components/Admin/PackagesAdmin";
 import BookingsAdmin from "./Components/Admin/Bookingsadmin";
+import ContactPage from "./Pages/ContactPage";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/packages" element={<PackagesPage />} />
         <Route path="/packages/:id" element={<PackagesDetails />} />
         <Route path="/booking" element={<BookingPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected Admin Routes */}
