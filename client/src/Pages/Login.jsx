@@ -162,12 +162,6 @@ export default function Login() {
               {loading ? "Signing in..." : "Sign in"}
             </motion.button>
 
-            {/* Optional Accent Link for Travel Feel */}
-            <div className="text-center">
-                <p className="text-sm text-[#475569]">
-                    Don't have an account? <span className="text-[#00A896] cursor-pointer font-bold">Register</span>
-                </p>
-            </div>
           </form>
         </div>
       </motion.div>

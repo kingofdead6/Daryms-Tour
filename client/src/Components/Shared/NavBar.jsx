@@ -5,18 +5,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { jwtDecode } from "jwt-decode";
 
-// ─── Palette ────────────────────────────────────────────────────────────────
-// Primary   #1E88E5  Ocean Blue   — CTAs, active, dot
-// Secondary #00A896  Teal Green   — accents
-// Accent    #FF6B35  Sunset Orange — urgency / close hover
-// Shell     #0F172A  — pill open bg
-
 const DOT_SIZE = 22;
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [userType, setUserType] = useState(null);
-  const [introState, setIntroState] = useState("idle"); // idle | expanding | collapsing
+  const [introState, setIntroState] = useState("idle"); 
   const introPlayedRef = useRef(false);
   const pillRef = useRef(null);
   const navigate = useNavigate();
@@ -95,21 +89,19 @@ export default function Navbar() {
     { name: "Home", link: "/" },
     { name: "Destinations", link: "/destinations" },
     { name: "Packages", link: "/packages" },
-    { name: "Booking", link: "/booking" },
+    { name: "contact", link: "/contact" },
   ];
   const adminNavItems = [
     { name: "Dashboard", link: "/admin/dashboard" },
-    { name: "Menu", link: "/admin/menu" },
-    { name: "Reservations", link: "/admin/reservations" },
-    { name: "Gallery", link: "/admin/gallery" },
+    { name: "Bookings", link: "/admin/bookings" },
   ];
   const superadminNavItems = [
     { name: "Dashboard", link: "/admin/dashboard" },
-    { name: "Categories", link: "/admin/categories" },
-    { name: "Menu", link: "/admin/menu" },
+    { name: "Bookings", link: "/admin/bookings" },
+    { name: "Destinations", link: "/admin/destinations" },
+    { name: "Packages", link: "/admin/packages" },
     { name: "Users", link: "/admin/users" },
-    { name: "Reservations", link: "/admin/reservations" },
-    { name: "Tables", link: "/admin/tables" },
+    { name: "Contact", link: "/admin/contact" },
   ];
   const navItems =
     userType === "superadmin" ? superadminNavItems :
@@ -119,18 +111,19 @@ export default function Navbar() {
 
   const isExpanded = open || introState === "expanding";
   const introDone = introState === "idle";
+  const goToBooking = () => navigate("/booking");
 
   // pill animate target
   const pillAnimate = (() => {
     if (introState === "expanding") {
       return isMobile
         ? { width: "100vw", height: "100vh", borderRadius: 20 }
-        : { width: 660, height: 62, borderRadius: 31 };
+        : { width: isAdmin ? 760 : 660, height: isAdmin ? 72 : 62, borderRadius: 31 };
     }
     if (open) {
       return isMobile
-        ? { width: "90vw", height: "40vh", borderRadius: 20 }
-        : { width: 660, height: 62, borderRadius: 31 };
+        ? { width: "90vw", height: "50vh", borderRadius: 20 }
+        : { width: isAdmin ? 760 : 660, height: isAdmin ? 72 : 62, borderRadius: 31 };
     }
     return { width: DOT_SIZE, height: DOT_SIZE, borderRadius: 999 };
   })();
@@ -229,7 +222,7 @@ export default function Navbar() {
                 </nav>
                 {isAdmin
                   ? <LogoutBtn onClick={handleLogout} />
-                  : <CtaBtn label="Book now" />
+                  : <CtaBtn label="Book now" onClick={goToBooking} />
                 }
                 <CloseBtn onClick={(e) => { e.stopPropagation(); setOpen(false); }} />
               </motion.div>
@@ -263,7 +256,7 @@ export default function Navbar() {
                 <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: 14 }}>
                   {isAdmin
                     ? <LogoutBtn mobile onClick={handleLogout} />
-                    : <CtaBtn mobile label="Book now" />
+                    : <CtaBtn mobile label="Book now" onClick={goToBooking} />
                   }
                 </div>
               </motion.div>
@@ -337,9 +330,9 @@ function MobileNavLink({ item, active, onClick }) {
   );
 }
 
-function CtaBtn({ label, mobile = false }) {
+function CtaBtn({ label, mobile = false, onClick }) {
   return (
-    <button style={{
+    <button onClick={onClick} style={{
       background: "#1E88E5", color: "#fff", border: "none",
       borderRadius: mobile ? 14 : 22,
       padding: mobile ? "12px 0" : "8px 16px",

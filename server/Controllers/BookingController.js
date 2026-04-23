@@ -12,8 +12,7 @@ export const createBooking = asyncHandler(async (req, res) => {
     specialRequests, dietaryRequirements, roomType,
     paymentMethod,
   } = req.body;
-    console.log("=== CREATE BOOKING REQUEST ===");
-    console.log("BODY:", req.body);
+
   if (!bookingType || !firstName || !lastName || !email || !phone || !departureDate || !pricePerPerson) {
     res.status(400);
     throw new Error("Missing required booking fields");
@@ -37,6 +36,8 @@ export const createBooking = asyncHandler(async (req, res) => {
   const subtotal = price * totalTravelers;
   const taxes = Math.round(subtotal * 0.05); // 5% tax
   const totalAmount = subtotal + taxes;
+
+let booking;
 
 try {
   booking = await Booking.create({
@@ -66,7 +67,6 @@ try {
     paymentStatus: "unpaid",
   });
 
-  console.log("✅ Booking created:", booking._id);
 
 } catch (err) {
   console.error("❌ FULL ERROR:", err);

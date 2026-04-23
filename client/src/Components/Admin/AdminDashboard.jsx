@@ -47,50 +47,31 @@ export default function AdminDashboard() {
   };
 
   const adminSections = [
-    { 
-      path: "/admin/gallery", 
-      title: "Manage Gallery", 
-      description: "Manage your gallery images" 
-    },
-    { 
-      path: "/admin/menu", 
-      title: "Manage Menu", 
-      description: "Edit and organize your menu items" 
-    },
     {
-      path: "/admin/reservations",
-      title: "Manage Reservations",
-      description: "View and manage customer reservations"
-    },
-    {
-      path: "/admin/destinations",
-      title: "Manage Destinations",
-      description: "Add, edit, or remove travel destinations"
+      path:"/admin/bookings",
+      title: "Manage Bookings",
+      description: "View and manage customer bookings"
     }
   ];
 
   const superadminSections = [
     ...adminSections,
+    {
+      path: "/admin/destinations",
+      title: "Manage Destinations",
+      description: "Add, edit, or remove travel destinations"
+    },
+    {
+      path:"/admin/packages",
+      title: "Manage Packages",
+      description: "Create and manage travel packages"
+    },
     { 
       path: "/admin/users", 
       title: "Manage Users", 
       description: "Add, edit, or remove users" 
     },
-    { 
-      path: "/admin/categories", 
-      title: "Manage Categories", 
-      description: "Organize menu and content categories" 
-    },
-    { 
-      path: "/admin/signature-dishes", 
-      title: "Manage Signature Dishes", 
-      description: "Curate your restaurant's signature dishes" 
-    },
-    {
-      path: "/admin/tables",
-      title: "Manage Tables",
-      description: "View and manage your restaurant's tables"
-    }
+  
   ];
 
   const sections = userType === "superadmin" ? superadminSections : adminSections;
