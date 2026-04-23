@@ -4,12 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './Routes/authRoutes.js';
 import { errorHandler } from './Middleware/error.js';
-import categoryRoutes from './Routes/categoriesRoutes.js';
-import galleryRoutes from './Routes/galleryRoutes.js';
-import signatureDishesRoutes from './Routes/SignatureDishesRoutes.js';
-import menuRoutes from './Routes/menuRoutes.js';
-import reservationRoutes from './Routes/reservationRoutes.js';
-import tableRoutes from './Routes/TableRoutes.js';
+
 import destinationRoutes from './Routes/Destinationroutes.js';
 import packageRoutes from './Routes/PackageRoutes.js';
 import bookingRoutes from './Routes/BookingRoutes.js';
@@ -28,12 +23,6 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use('/api/auth', authRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/gallery', galleryRoutes);
-app.use('/api/signature-dishes', signatureDishesRoutes); 
-app.use('/api/menu', menuRoutes);
-app.use('/api/reservations', reservationRoutes); 
-app.use('/api/tables', tableRoutes);
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', bookingRoutes); 
