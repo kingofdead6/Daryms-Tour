@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { jwtDecode } from "jwt-decode";
+import Logo from "../../assets/Logo.png";
 
 const DOT_SIZE = 22;
 
@@ -89,7 +90,7 @@ export default function Navbar() {
     { name: "Home", link: "/" },
     { name: "Destinations", link: "/destinations" },
     { name: "Packages", link: "/packages" },
-    { name: "contact", link: "/contact" },
+    { name: "Contact", link: "/contact" },
   ];
   const adminNavItems = [
     { name: "Dashboard", link: "/admin/dashboard" },
@@ -275,13 +276,15 @@ function LogoMark() {
   return (
     <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0 }}>
       <div style={{
-        width: 28, height: 28, borderRadius: "50%",
-        background: "linear-gradient(135deg, #1E88E5, #00A896)",
+        width: 28, height: 28, borderRadius: "100%",
+        background: "#FFFFFF",
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
-        <svg width="14" height="14" viewBox="0 0 12 12" fill="none">
-          <path d="M6 1L10 4V8L6 11L2 8V4Z" fill="white" fillOpacity=".9" />
-        </svg>
+        <img 
+          src={Logo}
+          alt="Daryms Tour Logo"
+          style={{ width: 20, height: 20 }}
+        /> 
       </div>
       <span style={{ fontSize: 15, fontWeight: 700, color: "#fff", letterSpacing: "-.02em" }}>Daryms Tour</span>
     </Link>

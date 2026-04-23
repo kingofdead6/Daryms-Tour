@@ -119,7 +119,7 @@ export default function PopularDestinations() {
                                             </p>
                                         </div>
 
-                                        <button className="w-full py-3.5 bg-white border border-gray-200 text-[#1E88E5] font-semibold rounded-xl group-hover:bg-[#FF6B35] group-hover:border-[#FF6B35] group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+                                        <button className="cursor-pointer w-full py-3.5 bg-white border border-gray-200 text-[#1E88E5] font-semibold rounded-xl group-hover:bg-[#FF6B35] group-hover:border-[#FF6B35] group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
                                             Explore Trip
                                             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
                                         </button>
@@ -138,7 +138,7 @@ export default function PopularDestinations() {
                         >
                             <button
                                 onClick={() => navigate("/destinations")}
-                                className="inline-flex items-center gap-2 text-[#1E88E5] font-semibold hover:gap-3 transition-all duration-200"
+                                className="cursor-pointer inline-flex items-center gap-2 text-[#1E88E5] font-semibold hover:gap-3 transition-all duration-200"
                             >
                                 View all destinations
                                 <ArrowRight size={18} />
