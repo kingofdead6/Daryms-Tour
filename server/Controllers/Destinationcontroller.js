@@ -4,7 +4,7 @@ import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 
 export const createDestination = asyncHandler(async (req, res) => {
-  const { name, country, continent, price, type, isVisible, description, duration, guided, includes } = req.body;
+  const { name, country, continent, price, type, isVisible, description, duration, guided, includes, plan } = req.body;
 
   if (!name || !country || !continent || !price || !type) {
     res.status(400);
@@ -34,6 +34,7 @@ export const createDestination = asyncHandler(async (req, res) => {
     duration: duration?.trim() || '',
     guided: guided === 'true' || guided === true,
     includes: includes ? JSON.parse(includes) : [],
+    plan: plan ? JSON.parse(plan) : [],
   });
 
   res.status(201).json(destination);
@@ -80,7 +81,7 @@ export const updateDestination = asyncHandler(async (req, res) => {
     throw new Error("Destination not found");
   }
 
-  const { name, country, continent, price, type, isVisible, description, duration, guided, includes } = req.body;
+  const { name, country, continent, price, type, isVisible, description, duration, guided, includes, plan } = req.body;
 
   let imageUrls = destination.image;
   if (req.files && req.files.length > 0) {
@@ -105,6 +106,7 @@ export const updateDestination = asyncHandler(async (req, res) => {
   destination.duration = duration?.trim() || destination.duration;
   destination.guided = guided !== undefined ? (guided === 'true' || guided === true) : destination.guided;
   destination.includes = includes ? JSON.parse(includes) : destination.includes;
+  destination.plan = plan ? JSON.parse(plan) : destination.plan;
 
   const updated = await destination.save();
   res.status(200).json(updated);

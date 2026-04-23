@@ -25,10 +25,10 @@ import ReservationPage from "./Pages/ReservationPage";
 import ScrollToTopButton from "./Components/Shared/ScrollToTopButton";
 import DestinationsPage from "./Components/Destination/DestinationsPage";
 import DestinationDetails from "./Components/Destination/DestinationDetails";
-import PackagesPage from "./Pages/Packages";
 import BookingPage from "./Pages/Booking";
 import DestinationsAdmin from "./Components/Admin/AdminDestinations";
-
+import PackagesPage from "./Components/Package/Packages";
+import PackagesDetails from "./Components/Package/PackageDetails";
 function App() {
   return (
     <Router>
@@ -42,7 +42,7 @@ function App() {
         <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/destinations/:id" element={<DestinationDetails />} />
         <Route path="/packages" element={<PackagesPage />} />
-
+        <Route path="/packages/:id" element={<PackagesDetails />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/login" element={<Login />} />
 

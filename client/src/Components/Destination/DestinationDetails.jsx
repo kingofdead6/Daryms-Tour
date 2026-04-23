@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Users, Star, CheckCircle, Info, ArrowLeft, Loader2, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
+import { Clock, Users, Star, CheckCircle, Info, ArrowLeft, Loader2, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../../../api";
@@ -14,7 +14,9 @@ export default function DestinationDetails() {
 
     const [destination, setDestination] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [imgIndex, setImgIndex] = useState(0);
+
+    // Slider state
+    const [currentSlide, setCurrentSlide] = useState(0);
 
     // Booking state
     const [date, setDate] = useState("");
@@ -35,24 +37,24 @@ export default function DestinationDetails() {
         fetchDestination();
     }, [id, navigate]);
 
-    // Hero slideshow — use destination images + 2 generic fallback panoramas
     const heroImages = destination
-        ? [
-              ...(Array.isArray(destination.image) ? destination.image : [destination.image]),
-              "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1200",
-              "https://images.unsplash.com/photo-1469796466635-455ede02891d?q=80&w=1200",
-          ]
+        ? (Array.isArray(destination.image) ? destination.image : [destination.image])
         : [];
 
-    useEffect(() => {
-        if (!heroImages.length) return;
-        const timer = setInterval(() => {
-            setImgIndex((prev) => (prev === heroImages.length - 1 ? 0 : prev + 1));
-        }, 5000);
-        return () => clearInterval(timer);
-    }, [heroImages.length]);
-
     const totalCost = destination ? destination.price * travelers : 0;
+
+    // Slider functions
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+    };
+
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+    };
 
     if (loading) {
         return (
@@ -68,7 +70,7 @@ export default function DestinationDetails() {
                 <h1 className="text-2xl font-bold text-[#0F172A]">Destination not found</h1>
                 <button
                     onClick={() => navigate("/destinations")}
-                    className="flex items-center gap-2 text-[#1E88E5] font-semibold"
+                    className="cursor-pointer flex items-center gap-2 text-[#1E88E5] font-semibold"
                 >
                     <ArrowLeft size={18} /> Back to Destinations
                 </button>
@@ -81,41 +83,24 @@ export default function DestinationDetails() {
 
             {/* HERO */}
             <section className="relative h-[70vh] w-full overflow-hidden">
-                <AnimatePresence mode="wait">
-                    <motion.img
-                        key={imgIndex}
-                        src={heroImages[imgIndex]}
-                        initial={{ scale: 1.2, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.9, opacity: 0 }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
-                        className="absolute inset-0 w-full h-full object-cover"
-                        alt={destination.name}
-                    />
-                </AnimatePresence>
+                <motion.img
+                    src={heroImages[0]}
+                    initial={{ scale: 1.05, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    alt={destination.name}
+                />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                 {/* Back button */}
                 <button
                     onClick={() => navigate("/destinations")}
-                    className="absolute top-8 left-8 flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-black/20 backdrop-blur px-4 py-2 rounded-full text-sm font-semibold"
+                    className="cursor-pointer absolute top-8 left-8 flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-black/20 backdrop-blur px-4 py-2 rounded-full text-sm font-semibold"
                 >
                     <ArrowLeft size={16} /> All Destinations
                 </button>
-
-                {/* Slideshow dots */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                    {heroImages.map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => setImgIndex(i)}
-                            className={`w-2 h-2 rounded-full transition-all ${
-                                i === imgIndex ? "bg-white w-6" : "bg-white/40"
-                            }`}
-                        />
-                    ))}
-                </div>
 
                 <div className="absolute bottom-12 left-12 text-white">
                     <motion.div
@@ -214,6 +199,98 @@ export default function DestinationDetails() {
                                     </motion.li>
                                 ))}
                             </ul>
+
+                            {destination.plan && destination.plan.length > 0 && (
+                                <>
+                                    <h3 className="text-2xl font-bold text-[#0F172A] mb-6">
+                                        Trip Plan
+                                    </h3>
+                                    <ol className="space-y-4 mb-10">
+                                        {destination.plan.map((step, i) => (
+                                            <motion.li
+                                                key={step + i}
+                                                initial={{ opacity: 0, x: -10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: i * 0.07 }}
+                                                className="rounded-2xl border border-slate-100 bg-[#F8FAFC] p-5 text-[#475569]"
+                                            >
+                                                <span className="font-bold text-[#0F172A] mr-2">{i + 1}.</span>
+                                                {step}
+                                            </motion.li>
+                                        ))}
+                                    </ol>
+                                </>
+                            )}
+
+                            {/* Image Slider */}
+                            {heroImages.length > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 }}
+                                    className="mb-10"
+                                >
+                                    <h3 className="text-2xl font-bold text-[#0F172A] mb-6">
+                                        Gallery
+                                    </h3>
+                                    <div className="relative w-full h-96 md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl">
+                                        {/* Main Slider Image */}
+                                        <motion.div
+                                            key={currentSlide}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.5 }}
+                                            className="w-full h-full"
+                                        >
+                                            <img
+                                                src={heroImages[currentSlide]}
+                                                alt={`${destination.name} ${currentSlide + 1}`}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </motion.div>
+
+                                        {/* Navigation Arrows */}
+                                        {heroImages.length > 1 && (
+                                            <>
+                                                <button
+                                                    onClick={prevSlide}
+                                                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-200 backdrop-blur-sm"
+                                                >
+                                                    <ChevronLeft size={24} />
+                                                </button>
+                                                <button
+                                                    onClick={nextSlide}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-200 backdrop-blur-sm"
+                                                >
+                                                    <ChevronRight size={24} />
+                                                </button>
+                                            </>
+                                        )}
+
+                                        {/* Dots Indicator */}
+                                        {heroImages.length > 1 && (
+                                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                                                {heroImages.map((_, index) => (
+                                                    <button
+                                                        key={index}
+                                                        onClick={() => goToSlide(index)}
+                                                        className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                                                            index === currentSlide
+                                                                ? "bg-white"
+                                                                : "bg-white/50 hover:bg-white/75"
+                                                        }`}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Image Counter */}
+                                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
+                                            {currentSlide + 1} / {heroImages.length}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
                         </motion.div>
                     </div>
 
@@ -248,17 +325,14 @@ export default function DestinationDetails() {
                                     <label className="text-xs font-bold uppercase text-[#475569] mb-1.5 block">
                                         Number of Travelers
                                     </label>
-                                    <select
+                                    <input
+                                        type="number"
+                                        min="1"
                                         value={travelers}
-                                        onChange={(e) => setTravelers(Number(e.target.value))}
+                                        onChange={(e) => setTravelers(Number(e.target.value) || 1)}
                                         className="w-full p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#1E88E5]/20"
-                                    >
-                                        {[1, 2, 3, 4, 5, 6, 8, 10, 12].map((n) => (
-                                            <option key={n} value={n}>
-                                                {n} Traveler{n > 1 ? "s" : ""}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        placeholder="Enter number of travelers"
+                                    />
                                 </div>
                             </div>
 
@@ -288,7 +362,7 @@ export default function DestinationDetails() {
                                     }
                                     toast.success("Booking request sent!");
                                 }}
-                                className="w-full py-4 bg-[#FF6B35] text-white font-bold rounded-xl shadow-lg shadow-orange-200/60 hover:bg-[#e85a24] transition-all active:scale-95"
+                                className="cursor-pointer w-full py-4 bg-[#FF6B35] text-white font-bold rounded-xl shadow-lg shadow-orange-200/60 hover:bg-[#e85a24] transition-all active:scale-95"
                             >
                                 Proceed to Checkout
                             </button>

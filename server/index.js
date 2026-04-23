@@ -11,6 +11,8 @@ import menuRoutes from './Routes/menuRoutes.js';
 import reservationRoutes from './Routes/reservationRoutes.js';
 import tableRoutes from './Routes/TableRoutes.js';
 import destinationRoutes from './Routes/Destinationroutes.js';
+import packageRoutes from './Routes/PackageRoutes.js';
+import bookingRoutes from './Routes/BookingRoutes.js';
 
 dotenv.config();
 
@@ -33,6 +35,9 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/reservations', reservationRoutes); 
 app.use('/api/tables', tableRoutes);
 app.use('/api/destinations', destinationRoutes);
+app.use('/api/packages', packageRoutes);
+app.use('/api/bookings', bookingRoutes); 
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

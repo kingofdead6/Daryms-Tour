@@ -15,7 +15,7 @@ export default function DestinationsPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [continent, setContinent] = useState("All");
-    const [maxPrice, setMaxPrice] = useState(5000);
+    const [maxPrice, setMaxPrice] = useState(10000);
 
     const navigate = useNavigate();
 
@@ -84,7 +84,7 @@ export default function DestinationsPage() {
                                     <button
                                         key={c}
                                         onClick={() => setContinent(c)}
-                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
+                                        className={`cursor-pointer px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
                                             continent === c
                                                 ? "bg-[#1E88E5] text-white border-[#1E88E5]"
                                                 : "bg-white text-[#475569] border-slate-200 hover:border-[#1E88E5] hover:text-[#1E88E5]"
@@ -190,7 +190,7 @@ export default function DestinationsPage() {
 
                                         <button
                                             onClick={() => navigate(`/destinations/${dest._id}`)}
-                                            className="w-full py-4 bg-[#1E88E5] text-white font-bold rounded-xl hover:bg-[#1565C0] transition-colors"
+                                            className="cursor-pointer w-full py-4 bg-[#1E88E5] text-white font-bold rounded-xl hover:bg-[#1565C0] transition-colors"
                                         >
                                             Explore Trip
                                         </button>

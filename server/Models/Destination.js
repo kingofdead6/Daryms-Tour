@@ -52,7 +52,14 @@ const destinationSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    isPopular: { type: Boolean, default: false }
+    isPopular: { 
+      type: Boolean, 
+      default: false
+    },
+    plan: {
+        type: [String],
+        default: []
+    }
 
   },
   { timestamps: true }

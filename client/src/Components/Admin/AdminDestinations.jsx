@@ -18,7 +18,7 @@ const TYPES = ["Luxury", "Cultural", "Safari", "Adventure", "Historical", "Beach
 const emptyForm = {
     name: "", country: "", continent: "Europe",
     price: "", type: "Luxury", isVisible: true,
-    description: "", duration: "", guided: false, includes: [],
+    description: "", duration: "", guided: false, includes: [], plan: [],
 };
 
 // ─── Form Modal ────────────────────────────────────────────────────────────
@@ -37,11 +37,14 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
                   duration: destination.duration || "",
                   guided: destination.guided || false,
                   includes: destination.includes || [],
+                  plan: destination.plan || [],
               }
             : emptyForm
     );
     const [selectedImages, setSelectedImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState(mode === "edit" ? (destination?.image || []) : []);
+    const [tempIncludes, setTempIncludes] = useState(mode === "edit" ? (destination?.includes || []).join(', ') : '');
+    const [tempPlan, setTempPlan] = useState(mode === "edit" ? (destination?.plan || []).join(', ') : '');
     const [submitting, setSubmitting] = useState(false);
 
     const handleFile = (e) => {
@@ -70,7 +73,10 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
         fd.append("description", form.description);
         fd.append("duration", form.duration);
         fd.append("guided", form.guided);
-        fd.append("includes", JSON.stringify(form.includes)); // since it's array
+        const includesArray = tempIncludes.split(',').map(s => s.trim()).filter(s => s);
+        const planArray = tempPlan.split(',').map(s => s.trim()).filter(s => s);
+        fd.append("includes", JSON.stringify(includesArray));
+        fd.append("plan", JSON.stringify(planArray));
         if (selectedImages && selectedImages.length > 0) {
             selectedImages.forEach((image, index) => {
                 fd.append("images", image);
@@ -211,8 +217,14 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
 
                     <div>
                         <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Includes (comma separated)</label>
-                        <textarea className={inputCls} placeholder="e.g. Accommodation, Meals, Transport" value={form.includes.join(', ')}
-                            onChange={(e) => setForm((f) => ({ ...f, includes: e.target.value.split(',').map(s => s.trim()).filter(s => s) }))} rows={2} />
+                        <textarea className={inputCls} placeholder="e.g. Accommodation, Meals, Transport" value={tempIncludes}
+                            onChange={(e) => setTempIncludes(e.target.value)} rows={2} />
+                    </div>
+
+                    <div>
+                        <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Itinerary / Plan (comma separated)</label>
+                        <textarea className={inputCls} placeholder="e.g. Day 1: Arrival, Day 2: City Tour" value={tempPlan}
+                            onChange={(e) => setTempPlan(e.target.value)} rows={2} />
                     </div>
 
                     <button
