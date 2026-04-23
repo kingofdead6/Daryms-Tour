@@ -8,6 +8,7 @@ import { errorHandler } from './Middleware/error.js';
 import destinationRoutes from './Routes/Destinationroutes.js';
 import packageRoutes from './Routes/PackageRoutes.js';
 import bookingRoutes from './Routes/BookingRoutes.js';
+import contactRoutes from './Routes/ContactRoutes.js';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', bookingRoutes); 
+app.use('/api/contacts', contactRoutes); 
 
 app.use(errorHandler);
 

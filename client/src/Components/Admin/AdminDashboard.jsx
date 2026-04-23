@@ -51,6 +51,11 @@ export default function AdminDashboard() {
       path:"/admin/bookings",
       title: "Manage Bookings",
       description: "View and manage customer bookings"
+    },
+    {
+      path: "/admin/contact",
+      title: "Manage Contact Messages",
+      description: "View and respond to customer inquiries"
     }
   ];
 

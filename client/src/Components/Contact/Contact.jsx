@@ -1,7 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { 
   Mail, 
   Phone, 
@@ -10,13 +12,39 @@ import {
   Instagram, 
   Twitter, 
   Send,
-  MessageSquare
+  MessageSquare,
+  Loader2
 } from "lucide-react";
+import { API_BASE_URL } from "../../../api";
 
 export default function Contact() {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "General Inquiry",
+    message: ""
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form logic here
+    setLoading(true);
+    try {
+      // POSTing to your backend endpoint
+      await axios.post(`${API_BASE_URL}/contacts`, formData);
+      toast.success("Message sent successfully!");
+      // Reset form
+      setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error(error.response?.data?.message || "Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -113,7 +141,11 @@ export default function Contact() {
                 <div>
                   <label className="text-xs font-bold uppercase text-[#475569] mb-2 block">Full Name</label>
                   <input 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     type="text" 
+                    required
                     placeholder="John Doe"
                     className="w-full p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 outline-none focus:border-[#1E88E5] transition-colors"
                   />
@@ -121,7 +153,11 @@ export default function Contact() {
                 <div>
                   <label className="text-xs font-bold uppercase text-[#475569] mb-2 block">Email Address</label>
                   <input 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     type="email" 
+                    required
                     placeholder="john@example.com"
                     className="w-full p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 outline-none focus:border-[#1E88E5] transition-colors"
                   />
@@ -130,18 +166,27 @@ export default function Contact() {
 
               <div>
                 <label className="text-xs font-bold uppercase text-[#475569] mb-2 block">Subject</label>
-                <select className="w-full p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 outline-none focus:border-[#1E88E5] transition-colors">
-                  <option>General Inquiry</option>
-                  <option>Booking Support</option>
-                  <option>Custom Package Request</option>
-                  <option>Partnership</option>
+                <select 
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="w-full p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 outline-none focus:border-[#1E88E5] transition-colors"
+                >
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Booking Support">Booking Support</option>
+                  <option value="Custom Package Request">Custom Package Request</option>
+                  <option value="Partnership">Partnership</option>
                 </select>
               </div>
 
               <div>
                 <label className="text-xs font-bold uppercase text-[#475569] mb-2 block">Your Message</label>
                 <textarea 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows="5"
+                  required
                   placeholder="Tell us about your dream destination..."
                   className="w-full p-4 bg-[#F8FAFC] rounded-xl border border-slate-200 outline-none focus:border-[#1E88E5] transition-colors resize-none"
                 ></textarea>
@@ -149,10 +194,20 @@ export default function Contact() {
 
               <button 
                 type="submit"
-                className="w-full py-4 bg-[#1E88E5] hover:bg-[#00A896] text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-blue-200"
+                disabled={loading}
+                className="cursor-pointer w-full py-4 bg-[#1E88E5] hover:bg-[#00A896] text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-blue-200 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Send Message
-                <Send size={18} />
+                {loading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    Send Message
+                    <Send size={18} />
+                  </>
+                )}
               </button>
             </form>
           </motion.div>

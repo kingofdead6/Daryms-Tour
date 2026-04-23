@@ -23,6 +23,7 @@ import PackagesDetails from "./Components/Package/Packagedetails";
 import PackagesAdmin from "./Components/Admin/Packagesadmin";
 import BookingsAdmin from "./Components/Admin/Bookingsadmin";
 import ContactPage from "./Pages/ContactPage";
+import AdminContacts from "./Components/Admin/AdminContact";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           <Route path="/admin/destinations" element={<DestinationsAdmin />} />
           <Route path="/admin/packages" element={<PackagesAdmin />} />
           <Route path="/admin/bookings" element={<BookingsAdmin />} />
+          <Route path="/admin/contact" element={<AdminContacts />} />
         </Route>
 
         {/* 404 Route */}
