@@ -3,14 +3,21 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CTASection() {
+  const navigate = useNavigate();
+
+  const handleBookingRedirect = () => {
+    navigate("/booking"); 
+  };
+
   return (
     <section className="relative py-20 px-6 overflow-hidden">
-      {/* Background with the Travel Gradient */}
+      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#1E88E5] to-[#00A896]" />
 
-      {/* Decorative White Circles for a modern travel feel */}
+      {/* Decorative shapes */}
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-black/10 rounded-full blur-3xl" />
 
@@ -31,22 +38,12 @@ export default function CTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            {/* Primary Action */}
-            <button className="w-full sm:w-auto px-10 py-5 bg-[#FF6B35] hover:bg-[#e85a24] text-white font-bold text-lg rounded-full transition-all duration-300 shadow-xl shadow-orange-900/20 hover:scale-105">
+            <button
+              onClick={handleBookingRedirect}
+              className="cursor-pointer w-full sm:w-auto px-10 py-5 bg-[#FF6B35] hover:bg-[#e85a24] text-white font-bold text-lg rounded-full transition-all duration-300 shadow-xl shadow-orange-900/20 hover:scale-105"
+            >
               Book Your Trip Now
             </button>
-
-            {/* Newsletter Input */}
-            <div className="flex w-full sm:w-auto bg-white/10 backdrop-blur-md border border-white/20 rounded-full p-1 pl-6 items-center group focus-within:bg-white/20 transition-all">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-transparent border-none outline-none text-white placeholder-white/60 w-full sm:w-48 py-2"
-              />
-              <button className="p-4 bg-white text-[#1E88E5] rounded-full hover:bg-[#F8FAFC] transition-colors">
-                <Send size={20} />
-              </button>
-            </div>
           </div>
 
           <p className="mt-8 text-white/60 text-sm italic">

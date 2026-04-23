@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "../../../api";
-
+import { useLocation } from "react-router-dom";
 const CONTINENTS = ["All", "Europe", "Asia", "Africa", "North America", "South America", "Oceania"];
 
 export default function DestinationsPage() {
@@ -18,7 +18,13 @@ export default function DestinationsPage() {
     const [maxPrice, setMaxPrice] = useState(10000);
 
     const navigate = useNavigate();
+const location = useLocation();
 
+useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get("search") || "";
+    setSearch(searchParam);
+}, [location.search]);
     useEffect(() => {
         const fetchDestinations = async () => {
             try {

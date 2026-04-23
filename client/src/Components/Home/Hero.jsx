@@ -1,113 +1,95 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import HeroBG from "../../assets/HomeBG.mp4";
 
 export default function Hero() {
+  const navigate = useNavigate();
+  const [destination, setDestination] = useState("");
+  const [date, setDate] = useState("");
+  const [travelers, setTravelers] = useState("1");
+
+  const handleSearch = () => {
+    navigate(
+      `/destinations?search=${encodeURIComponent(destination)}`
+    );
+  };
+
   return (
     <section className="relative min-h-screen w-full overflow-hidden font-sans">
 
-      {/* Video Background */}
+      {/* VIDEO */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-        >
+        <video autoPlay muted loop playsInline className="w-full h-full object-cover">
           <source src={HeroBG} type="video/mp4" />
-          Your browser does not support the video tag.
         </video>
-
-        {/* Travel Optimized Overlay: Gradient from Ocean Blue to Teal */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#1E88E5]/70 to-[#00A896]/60 mix-blend-multiply" />
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      {/* Content */}
+      {/* CONTENT */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-6 pt-20">
         <div className="max-w-5xl w-full text-center">
 
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6"
-          >
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
             Explore the World <br />
             <span className="text-[#00A896]">with Confidence</span>
-          </motion.h1>
+          </h1>
 
-          {/* Subtext */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 1 }}
-            className="text-xl md:text-2xl text-white/90 mb-12 font-light"
-          >
+          <p className="text-xl md:text-2xl text-white/90 mb-12">
             Find the best travel packages tailored for you
-          </motion.p>
+          </p>
 
-          {/* Search Bar Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="bg-white p-4 md:p-2 rounded-2xl md:rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-2 max-w-4xl mx-auto"
-          >
-            {/* Destination */}
-            <div className="flex-1 w-full px-6 py-3 text-left border-b md:border-b-0 md:border-r border-gray-100">
-              <label className="block text-[10px] uppercase tracking-wider font-bold text-[#475569]">Destination</label>
+          {/* SEARCH BAR */}
+          <div className="bg-white p-4 rounded-2xl md:rounded-full shadow-2xl flex flex-col md:flex-row gap-2 max-w-4xl mx-auto">
+
+            {/* DESTINATION INPUT */}
+            <div className="flex-1 px-4 py-2">
+              <label className="text-xs font-bold text-[#475569]">Destination</label>
               <input
-                type="text"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
                 placeholder="Where to?"
-                className="w-full bg-transparent outline-none text-[#0F172A] placeholder-gray-400"
+                className="w-full outline-none"
               />
             </div>
 
-            {/* Date Picker */}
-            <div className="flex-1 w-full px-6 py-3 text-left border-b md:border-b-0 md:border-r border-gray-100">
-              <label className="block text-[10px] uppercase tracking-wider font-bold text-[#475569]">Date</label>
+            {/* DATE */}
+            <div className="flex-1 px-4 py-2">
+              <label className="text-xs font-bold text-[#475569]">Date</label>
               <input
                 type="date"
-                className="w-full bg-transparent outline-none text-[#0F172A]"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full outline-none"
               />
             </div>
 
-            {/* Travelers */}
-            <div className="flex-1 w-full px-6 py-3 text-left">
-              <label className="block text-[10px] uppercase tracking-wider font-bold text-[#475569]">Travelers</label>
-              <select className="w-full bg-transparent outline-none text-[#0F172A]">
-                <option>1 Traveler</option>
-                <option>2 Travelers</option>
-                <option>Group</option>
+            {/* TRAVELERS */}
+            <div className="flex-1 px-4 py-2">
+              <label className="text-xs font-bold text-[#475569]">Travelers</label>
+              <select
+                value={travelers}
+                onChange={(e) => setTravelers(e.target.value)}
+                className="w-full outline-none"
+              >
+                <option value="1">1 Traveler</option>
+                <option value="2">2 Travelers</option>
+                <option value="group">Group</option>
               </select>
             </div>
 
-            {/* Search CTA */}
-            <button className="w-full md:w-auto px-8 py-4 bg-[#FF6B35] hover:bg-[#e85a24] text-white font-bold rounded-xl md:rounded-full transition-all duration-300 shadow-lg shadow-orange-500/30">
+            {/* BUTTON */}
+            <button
+              onClick={handleSearch}
+              className="cursor-pointer px-8 py-4 bg-[#FF6B35] text-white font-bold rounded-xl md:rounded-full hover:bg-[#e85a24]"
+            >
               Search Trips
             </button>
-          </motion.div>
 
-          {/* Secondary CTA */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="mt-8"
-          >
-            <Link
-              to="/offers"
-              className="text-white hover:text-[#00A896] font-medium underline underline-offset-8 transition-colors"
-            >
-              View Special Offers
-            </Link>
-          </motion.div>
+          </div>
 
         </div>
       </div>
