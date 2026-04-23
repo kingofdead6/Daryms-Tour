@@ -20,7 +20,7 @@ import BookingPage from "./Pages/Booking";
 import DestinationsAdmin from "./Components/Admin/AdminDestinations";
 import PackagesPage from "./Components/Package/Packages";
 import PackagesDetails from "./Components/Package/Packagedetails";
-import PackagesAdmin from "./Components/Admin/PackagesAdmin";
+import PackagesAdmin from "./Components/Admin/Packagesadmin";
 import BookingsAdmin from "./Components/Admin/Bookingsadmin";
 import ContactPage from "./Pages/ContactPage";
 
