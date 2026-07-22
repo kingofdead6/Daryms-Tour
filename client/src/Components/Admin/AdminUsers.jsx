@@ -196,7 +196,7 @@ export default function AdminUsers() {
   };
 
   return (
-    <section className="min-h-screen py-10 px-4 bg-[#0c0a08] text-stone-200 mt-16">
+    <section className="min-h-screen py-10 px-4 bg-stone-50 text-stone-900 mt-16">
       <div className="max-w-6xl mx-auto">
 
         {/* HEADER */}
@@ -211,7 +211,7 @@ export default function AdminUsers() {
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-6 py-4 bg-amber-500 text-black rounded-2xl font-semibold"
+            className="px-6 py-4 bg-amber-500 text-white rounded-2xl font-semibold hover:bg-amber-600 transition-all"
           >
             <Plus className="inline mr-2" /> Create User
           </button>
@@ -219,19 +219,19 @@ export default function AdminUsers() {
           <div className="flex flex-1 gap-4">
 
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" />
               <input
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 py-4 bg-[#11100e] border border-stone-700 rounded-2xl"
+                className="w-full pl-12 py-4 bg-white border border-stone-200 rounded-2xl text-stone-900 outline-none focus:border-amber-400 shadow-sm"
               />
             </div>
 
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              className="px-5 py-4 bg-[#11100e] border border-stone-700 rounded-2xl"
+              className="px-5 py-4 bg-white border border-stone-200 rounded-2xl text-stone-900 outline-none focus:border-amber-400 shadow-sm"
             >
               <option value="">All</option>
               <option value="admin">Admin</option>
@@ -248,18 +248,18 @@ export default function AdminUsers() {
             <motion.div
               key={user._id}
               whileHover={{ y: -6 }}
-              className="bg-[#11100e] border border-stone-800 rounded-2xl p-6 text-center"
+              className="bg-white border border-stone-200 rounded-2xl p-6 text-center shadow-sm"
             >
               {user.usertype === "superadmin" ? (
-                <ShieldCheck className="mx-auto text-amber-400" size={50} />
+                <ShieldCheck className="mx-auto text-amber-500" size={50} />
               ) : (
                 <Shield className="mx-auto text-stone-400" size={50} />
               )}
 
-              <h3 className="mt-4 text-xl">{user.name}</h3>
+              <h3 className="mt-4 text-xl text-stone-900">{user.name}</h3>
               <p className="text-stone-400">{user.email}</p>
 
-              <div className="mt-2 text-amber-400 text-sm">
+              <div className="mt-2 text-amber-600 text-sm">
                 {user.usertype}
               </div>
 
@@ -270,7 +270,7 @@ export default function AdminUsers() {
                     setEditForm(user);
                     setShowEditModal(true);
                   }}
-                  className="flex-1 py-2 bg-stone-800 rounded-xl"
+                  className="flex-1 py-2 bg-stone-100 text-stone-700 rounded-xl hover:bg-stone-200 transition-all"
                 >
                   Edit
                 </button>
@@ -280,7 +280,7 @@ export default function AdminUsers() {
                     setSelectedUser(user);
                     setShowPasswordModal(true);
                   }}
-                  className="flex-1 py-2 bg-amber-500 text-black rounded-xl"
+                  className="flex-1 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-all"
                 >
                   Password
                 </button>
@@ -289,7 +289,7 @@ export default function AdminUsers() {
               {user.usertype !== "superadmin" && (
                 <button
                   onClick={() => handleDelete(user._id)}
-                  className="mt-4 w-full py-2 bg-red-600 rounded-xl"
+                  className="mt-4 w-full py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all"
                 >
                   Delete
                 </button>
@@ -333,7 +333,7 @@ export default function AdminUsers() {
                 }
               />
 
-              <button className="w-full py-3 bg-amber-500 text-black rounded-xl">
+              <button className="w-full py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-all">
                 Create
               </button>
             </form>
@@ -361,7 +361,7 @@ export default function AdminUsers() {
                 }
               />
 
-              <button className="w-full py-3 bg-amber-500 text-black rounded-xl">
+              <button className="w-full py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-all">
                 Update
               </button>
             </form>
@@ -400,7 +400,7 @@ export default function AdminUsers() {
                 }
               />
 
-              <button className="w-full py-3 bg-amber-500 text-black rounded-xl">
+              <button className="w-full py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-all">
                 Update Password
               </button>
             </form>
@@ -416,11 +416,11 @@ export default function AdminUsers() {
 function Modal({ title, children, onClose }) {
   return (
     <motion.div
-      className="fixed inset-0 bg-black/70 flex items-end sm:items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center p-4 z-50"
       onClick={onClose}
     >
       <motion.div
-        className="bg-[#11100e] border border-stone-800 w-full max-w-lg rounded-3xl p-6 text-stone-200"
+        className="bg-white border border-stone-200 w-full max-w-lg rounded-3xl p-6 text-stone-900 shadow-2xl"
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
@@ -428,7 +428,7 @@ function Modal({ title, children, onClose }) {
       >
         <div className="flex justify-between mb-4">
           <h2 className="text-xl font-light">{title}</h2>
-          <button onClick={onClose}>
+          <button onClick={onClose} className="cursor-pointer text-stone-400 hover:text-stone-900 transition-colors">
             <X />
           </button>
         </div>
@@ -445,7 +445,7 @@ function Input({ label, ...props }) {
       <label className="text-sm text-stone-400">{label}</label>
       <input
         {...props}
-        className="w-full mt-1 px-4 py-3 bg-[#0c0a08] border border-stone-700 rounded-xl"
+        className="w-full mt-1 px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 outline-none focus:border-amber-400"
       />
     </div>
   );

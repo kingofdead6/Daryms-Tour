@@ -22,10 +22,10 @@ const STATUS_COLORS = {
 };
 
 const PAYMENT_COLORS = {
-  unpaid: "text-red-400",
-  partially_paid: "text-orange-400",
-  paid: "text-emerald-400",
-  refunded: "text-blue-400",
+  unpaid: "text-red-600",
+  partially_paid: "text-orange-600",
+  paid: "text-emerald-600",
+  refunded: "text-blue-600",
 };
 
 const STATUSES = ["pending", "confirmed", "cancelled", "completed", "no-show"];
@@ -64,22 +64,22 @@ function BookingDrawer({ booking, onClose, onUpdate }) {
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex justify-end"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex justify-end"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <motion.div
-        className="bg-[#110e0c] w-full max-w-lg h-full overflow-y-auto shadow-2xl"
+        className="bg-white w-full max-w-lg h-full overflow-y-auto shadow-2xl border-l border-stone-200"
         initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-8 border-b border-amber-900/20">
+        <div className="flex items-center justify-between p-8 border-b border-stone-200">
           <div>
-            <h2 className="text-2xl font-serif text-white">Booking Details</h2>
-            <p className="text-amber-100/40 text-sm font-mono mt-1">{booking.referenceCode}</p>
+            <h2 className="text-2xl font-serif text-stone-900">Booking Details</h2>
+            <p className="text-stone-400 text-sm font-mono mt-1">{booking.referenceCode}</p>
           </div>
-          <button onClick={onClose} className="cursor-pointer text-amber-100/40 hover:text-white transition-colors">
+          <button onClick={onClose} className="cursor-pointer text-stone-400 hover:text-stone-900 transition-colors">
             <X size={28} />
           </button>
         </div>
@@ -87,26 +87,26 @@ function BookingDrawer({ booking, onClose, onUpdate }) {
         <div className="p-8 space-y-7">
           {/* Trip */}
           <div>
-            <h3 className="text-amber-400 text-xs uppercase tracking-widest mb-3">Trip</h3>
-            <div className="flex items-center gap-4 bg-black/30 rounded-2xl p-4">
+            <h3 className="text-amber-600 text-xs uppercase tracking-widest mb-3">Trip</h3>
+            <div className="flex items-center gap-4 bg-stone-50 border border-stone-200 rounded-2xl p-4">
               {tripImage ? (
                 <img src={tripImage} alt={tripName} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
               ) : (
-                <div className="w-14 h-14 rounded-xl bg-amber-900/20 flex items-center justify-center">
-                  {booking.bookingType === "destination" ? <MapPin size={20} className="text-amber-400" /> : <Package size={20} className="text-amber-400" />}
+                <div className="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center">
+                  {booking.bookingType === "destination" ? <MapPin size={20} className="text-amber-600" /> : <Package size={20} className="text-amber-600" />}
                 </div>
               )}
               <div>
-                <p className="text-white font-semibold">{tripName || "—"}</p>
-                <p className="text-amber-100/40 text-sm capitalize">{booking.bookingType}</p>
+                <p className="text-stone-900 font-semibold">{tripName || "—"}</p>
+                <p className="text-stone-400 text-sm capitalize">{booking.bookingType}</p>
               </div>
             </div>
           </div>
 
           {/* Guest info */}
           <div>
-            <h3 className="text-amber-400 text-xs uppercase tracking-widest mb-3">Guest</h3>
-            <div className="bg-black/30 rounded-2xl p-5 space-y-3">
+            <h3 className="text-amber-600 text-xs uppercase tracking-widest mb-3">Guest</h3>
+            <div className="bg-stone-50 border border-stone-200 rounded-2xl p-5 space-y-3">
               {[
                 { icon: <Users size={14} />, label: `${booking.firstName} ${booking.lastName}` },
                 { icon: <Mail size={14} />, label: booking.email },
@@ -114,8 +114,8 @@ function BookingDrawer({ booking, onClose, onUpdate }) {
                 { icon: <Globe size={14} />, label: booking.nationality || "—" },
                 { icon: <FileText size={14} />, label: booking.passportNumber || "—" },
               ].map(({ icon, label }) => (
-                <div key={label} className="flex items-center gap-3 text-amber-100/60 text-sm">
-                  <span className="text-amber-400/60">{icon}</span>
+                <div key={label} className="flex items-center gap-3 text-stone-600 text-sm">
+                  <span className="text-amber-600/70">{icon}</span>
                   {label}
                 </div>
               ))}
@@ -124,34 +124,34 @@ function BookingDrawer({ booking, onClose, onUpdate }) {
 
           {/* Trip details */}
           <div>
-            <h3 className="text-amber-400 text-xs uppercase tracking-widest mb-3">Trip Details</h3>
-            <div className="bg-black/30 rounded-2xl p-5 space-y-2 text-sm">
-              <div className="flex justify-between text-amber-100/60">
+            <h3 className="text-amber-600 text-xs uppercase tracking-widest mb-3">Trip Details</h3>
+            <div className="bg-stone-50 border border-stone-200 rounded-2xl p-5 space-y-2 text-sm">
+              <div className="flex justify-between text-stone-500">
                 <span>Departure</span>
-                <span className="text-white">{new Date(booking.departureDate).toLocaleDateString()}</span>
+                <span className="text-stone-900">{new Date(booking.departureDate).toLocaleDateString()}</span>
               </div>
               {booking.returnDate && (
-                <div className="flex justify-between text-amber-100/60">
+                <div className="flex justify-between text-stone-500">
                   <span>Return</span>
-                  <span className="text-white">{new Date(booking.returnDate).toLocaleDateString()}</span>
+                  <span className="text-stone-900">{new Date(booking.returnDate).toLocaleDateString()}</span>
                 </div>
               )}
-              <div className="flex justify-between text-amber-100/60">
+              <div className="flex justify-between text-stone-500">
                 <span>Adults</span>
-                <span className="text-white">{booking.travelers?.adults}</span>
+                <span className="text-stone-900">{booking.travelers?.adults}</span>
               </div>
-              <div className="flex justify-between text-amber-100/60">
+              <div className="flex justify-between text-stone-500">
                 <span>Children</span>
-                <span className="text-white">{booking.travelers?.children}</span>
+                <span className="text-stone-900">{booking.travelers?.children}</span>
               </div>
-              <div className="flex justify-between text-amber-100/60">
+              <div className="flex justify-between text-stone-500">
                 <span>Room Type</span>
-                <span className="text-white">{booking.roomType}</span>
+                <span className="text-stone-900">{booking.roomType}</span>
               </div>
               {booking.specialRequests && (
-                <div className="pt-2 border-t border-amber-900/20">
-                  <p className="text-amber-100/40 text-xs mb-1">Special Requests</p>
-                  <p className="text-white text-sm">{booking.specialRequests}</p>
+                <div className="pt-2 border-t border-stone-200">
+                  <p className="text-stone-400 text-xs mb-1">Special Requests</p>
+                  <p className="text-stone-900 text-sm">{booking.specialRequests}</p>
                 </div>
               )}
             </div>
@@ -159,27 +159,27 @@ function BookingDrawer({ booking, onClose, onUpdate }) {
 
           {/* Financials */}
           <div>
-            <h3 className="text-amber-400 text-xs uppercase tracking-widest mb-3">Financials</h3>
-            <div className="bg-black/30 rounded-2xl p-5 space-y-2 text-sm">
-              <div className="flex justify-between text-amber-100/60">
+            <h3 className="text-amber-600 text-xs uppercase tracking-widest mb-3">Financials</h3>
+            <div className="bg-stone-50 border border-stone-200 rounded-2xl p-5 space-y-2 text-sm">
+              <div className="flex justify-between text-stone-500">
                 <span>Price/person</span>
-                <span className="text-white">${booking.pricePerPerson?.toLocaleString()}</span>
+                <span className="text-stone-900">${booking.pricePerPerson?.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-amber-100/60">
+              <div className="flex justify-between text-stone-500">
                 <span>Travelers</span>
-                <span className="text-white">{booking.totalTravelers}</span>
+                <span className="text-stone-900">{booking.totalTravelers}</span>
               </div>
-              <div className="flex justify-between text-amber-100/60">
+              <div className="flex justify-between text-stone-500">
                 <span>Subtotal</span>
-                <span className="text-white">${booking.subtotal?.toLocaleString()}</span>
+                <span className="text-stone-900">${booking.subtotal?.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-amber-100/60">
+              <div className="flex justify-between text-stone-500">
                 <span>Taxes</span>
-                <span className="text-white">${booking.taxes?.toLocaleString()}</span>
+                <span className="text-stone-900">${booking.taxes?.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between border-t border-amber-900/20 pt-2">
-                <span className="font-bold text-white">Total</span>
-                <span className="text-amber-400 font-bold text-lg">${booking.totalAmount?.toLocaleString()}</span>
+              <div className="flex justify-between border-t border-stone-200 pt-2">
+                <span className="font-bold text-stone-900">Total</span>
+                <span className="text-amber-600 font-bold text-lg">${booking.totalAmount?.toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -187,33 +187,33 @@ function BookingDrawer({ booking, onClose, onUpdate }) {
           {/* Status controls */}
           <div className="space-y-4">
             <div>
-              <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2">Booking Status</label>
+              <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2">Booking Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full bg-black/40 border border-amber-900/20 rounded-2xl p-4 text-white outline-none focus:border-amber-400/50 appearance-none"
+                className="w-full bg-stone-50 border border-stone-200 rounded-2xl p-4 text-stone-900 outline-none focus:border-amber-400 appearance-none"
               >
                 {STATUSES.map((s) => <option key={s} value={s} className="capitalize">{s}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2">Payment Status</label>
+              <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2">Payment Status</label>
               <select
                 value={paymentStatus}
                 onChange={(e) => setPaymentStatus(e.target.value)}
-                className="w-full bg-black/40 border border-amber-900/20 rounded-2xl p-4 text-white outline-none focus:border-amber-400/50 appearance-none"
+                className="w-full bg-stone-50 border border-stone-200 rounded-2xl p-4 text-stone-900 outline-none focus:border-amber-400 appearance-none"
               >
                 {PAYMENT_STATUSES.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2">Admin Notes</label>
+              <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2">Admin Notes</label>
               <textarea
                 rows={3}
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
                 placeholder="Internal notes (not visible to customer)..."
-                className="w-full bg-black/40 border border-amber-900/20 rounded-2xl p-4 text-white outline-none focus:border-amber-400/50 resize-none placeholder-amber-100/20"
+                className="w-full bg-stone-50 border border-stone-200 rounded-2xl p-4 text-stone-900 outline-none focus:border-amber-400 resize-none placeholder-stone-300"
               />
             </div>
           </div>
@@ -221,7 +221,7 @@ function BookingDrawer({ booking, onClose, onUpdate }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="cursor-pointer w-full bg-amber-400 text-black py-4 rounded-2xl font-bold uppercase tracking-widest hover:bg-amber-300 disabled:opacity-50 transition-all"
+            className="cursor-pointer w-full bg-amber-500 text-white py-4 rounded-2xl font-bold uppercase tracking-widest hover:bg-amber-600 disabled:opacity-50 transition-all"
           >
             {saving ? "Saving..." : "Save Changes"}
           </button>
@@ -287,14 +287,14 @@ export default function BookingsAdmin() {
   });
 
   const statCards = [
-    { icon: <FileText size={18} />, label: "Total", value: stats.total || 0, color: "text-white" },
-    { icon: <Clock size={18} />, label: "Pending", value: stats.pending || 0, color: "text-yellow-400" },
-    { icon: <CheckCircle size={18} />, label: "Confirmed", value: stats.confirmed || 0, color: "text-emerald-400" },
-    { icon: <DollarSign size={18} />, label: "Revenue", value: `$${(stats.totalRevenue || 0).toLocaleString()}`, color: "text-amber-400" },
+    { icon: <FileText size={18} />, label: "Total", value: stats.total || 0, color: "text-stone-900" },
+    { icon: <Clock size={18} />, label: "Pending", value: stats.pending || 0, color: "text-yellow-600" },
+    { icon: <CheckCircle size={18} />, label: "Confirmed", value: stats.confirmed || 0, color: "text-emerald-600" },
+    { icon: <DollarSign size={18} />, label: "Revenue", value: `$${(stats.totalRevenue || 0).toLocaleString()}`, color: "text-amber-600" },
   ];
 
   return (
-    <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen relative pt-10">
+    <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen relative pt-10 bg-stone-50">
 
       <AnimatePresence>
         {selectedBooking && (
@@ -309,21 +309,21 @@ export default function BookingsAdmin() {
       <AnimatePresence>
         {deleteTarget && (
           <motion.div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-[#110e0c] border border-red-900/30 rounded-3xl p-8 max-w-sm w-full text-center"
+              className="bg-white border border-red-200 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl"
               initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
             >
-              <div className="w-14 h-14 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Trash2 size={24} className="text-red-400" />
+              <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Trash2 size={24} className="text-red-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Delete Booking?</h3>
-              <p className="text-amber-100/40 text-sm mb-6">This action cannot be undone.</p>
+              <h3 className="text-xl font-bold text-stone-900 mb-2">Delete Booking?</h3>
+              <p className="text-stone-400 text-sm mb-6">This action cannot be undone.</p>
               <div className="flex gap-3">
                 <button onClick={() => setDeleteTarget(null)}
-                  className="flex-1 py-3 rounded-2xl border border-amber-900/30 text-amber-100/60 hover:text-white transition-all font-semibold">
+                  className="flex-1 py-3 rounded-2xl border border-stone-200 text-stone-500 hover:text-stone-900 transition-all font-semibold">
                   Cancel
                 </button>
                 <button onClick={() => handleDelete(deleteTarget)}
@@ -342,13 +342,13 @@ export default function BookingsAdmin() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
           <div>
             <Link to="/admin/dashboard"
-              className="text-amber-400 hover:text-amber-300 text-sm tracking-widest uppercase flex items-center gap-2 mb-4">
+              className="text-amber-600 hover:text-amber-700 text-sm tracking-widest uppercase flex items-center gap-2 mb-4">
               <ArrowLeft size={18} /> Dashboard
             </Link>
-            <h1 className="text-5xl md:text-7xl font-serif text-white">Bookings</h1>
-            <p className="text-amber-100/60 text-xl mt-4">Manage all customer bookings.</p>
+            <h1 className="text-5xl md:text-7xl font-serif text-stone-900">Bookings</h1>
+            <p className="text-stone-500 text-xl mt-4">Manage all customer bookings.</p>
           </div>
-          <button onClick={fetchAll} className="cursor-pointer flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-all">
+          <button onClick={fetchAll} className="cursor-pointer flex items-center gap-2 text-amber-600 hover:text-amber-700 transition-all">
             <RefreshCw size={18} /> Refresh
           </button>
         </div>
@@ -356,9 +356,9 @@ export default function BookingsAdmin() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-12">
           {statCards.map(({ icon, label, value, color }) => (
-            <div key={label} className="bg-[#1a1612] border border-amber-900/20 rounded-3xl p-6">
-              <div className="text-amber-100/30 mb-2">{icon}</div>
-              <p className="text-amber-100/40 text-[10px] uppercase tracking-[0.2em] mb-1">{label}</p>
+            <div key={label} className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm">
+              <div className="text-stone-300 mb-2">{icon}</div>
+              <p className="text-stone-400 text-[10px] uppercase tracking-[0.2em] mb-1">{label}</p>
               <p className={`text-3xl font-bold ${color}`}>{value}</p>
             </div>
           ))}
@@ -367,11 +367,11 @@ export default function BookingsAdmin() {
         {/* Filters */}
         <div className="flex flex-col lg:flex-row gap-5 items-start lg:items-center justify-between mb-8">
           <div className="relative max-w-md w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/50" size={18} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
             <input
               type="text"
               placeholder="Search name, email, reference..."
-              className="w-full bg-[#1a1612] border border-amber-900/20 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-amber-400/50 transition-all placeholder-amber-100/20"
+              className="w-full bg-white border border-stone-200 rounded-2xl py-4 pl-12 pr-4 text-stone-900 outline-none focus:border-amber-400 transition-all placeholder-stone-300 shadow-sm"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -386,8 +386,8 @@ export default function BookingsAdmin() {
                   onClick={() => setStatusFilter(s)}
                   className={`cursor-pointer px-4 py-2 rounded-full border transition-all text-xs font-medium capitalize whitespace-nowrap ${
                     statusFilter === s
-                      ? "bg-amber-400 border-amber-400 text-black"
-                      : "bg-[#1a1612] border-amber-900/20 text-amber-100/60 hover:border-amber-400/50"
+                      ? "bg-amber-500 border-amber-500 text-white"
+                      : "bg-white border-stone-200 text-stone-500 hover:border-amber-400"
                   }`}
                 >
                   {s === "all" ? "All Status" : s}
@@ -403,8 +403,8 @@ export default function BookingsAdmin() {
                   onClick={() => setTypeFilter(t)}
                   className={`cursor-pointer px-4 py-2 rounded-full border transition-all text-xs font-medium capitalize ${
                     typeFilter === t
-                      ? "bg-white/10 border-white/30 text-white"
-                      : "bg-[#1a1612] border-amber-900/20 text-amber-100/60 hover:border-amber-400/50"
+                      ? "bg-stone-900 border-stone-900 text-white"
+                      : "bg-white border-stone-200 text-stone-500 hover:border-amber-400"
                   }`}
                 >
                   {t === "all" ? "All Types" : t}
@@ -415,20 +415,20 @@ export default function BookingsAdmin() {
         </div>
 
         {/* Table */}
-        <div className="bg-[#1a1612] border border-amber-900/20 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-sm">
           {loading ? (
-            <div className="flex items-center justify-center py-24 text-amber-400">
+            <div className="flex items-center justify-center py-24 text-amber-500">
               <Loader2 size={36} className="animate-spin" />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="py-24 text-center text-amber-100/30 italic">
-              <FileText size={36} className="mx-auto mb-3 opacity-30" />
+            <div className="py-24 text-center text-stone-300 italic">
+              <FileText size={36} className="mx-auto mb-3 opacity-50" />
               No bookings found.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left min-w-[900px]">
-                <thead className="bg-[#0c0a08] text-amber-100/40 text-[10px] uppercase tracking-[0.2em]">
+                <thead className="bg-stone-50 text-stone-400 text-[10px] uppercase tracking-[0.2em]">
                   <tr>
                     <th className="px-6 py-5">Reference</th>
                     <th className="px-6 py-5">Guest</th>
@@ -441,7 +441,7 @@ export default function BookingsAdmin() {
                     <th className="px-6 py-5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-amber-900/10">
+                <tbody className="divide-y divide-stone-100">
                   <AnimatePresence>
                     {filtered.map((booking, i) => {
                       const tripName = booking.bookingType === "destination"
@@ -458,38 +458,38 @@ export default function BookingsAdmin() {
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ delay: i * 0.03 }}
-                          className="hover:bg-white/[0.02] transition-colors group"
+                          className="hover:bg-stone-50 transition-colors group"
                         >
                           <td className="px-6 py-4">
-                            <span className="text-amber-400 font-mono text-sm font-bold">{booking.referenceCode}</span>
+                            <span className="text-amber-600 font-mono text-sm font-bold">{booking.referenceCode}</span>
                           </td>
                           <td className="px-6 py-4">
-                            <p className="text-white text-sm font-semibold">{booking.firstName} {booking.lastName}</p>
-                            <p className="text-amber-100/40 text-xs">{booking.email}</p>
+                            <p className="text-stone-900 text-sm font-semibold">{booking.firstName} {booking.lastName}</p>
+                            <p className="text-stone-400 text-xs">{booking.email}</p>
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               {tripImg ? (
                                 <img src={tripImg} alt={tripName} className="w-9 h-9 rounded-lg object-cover flex-shrink-0" />
                               ) : (
-                                <div className="w-9 h-9 rounded-lg bg-amber-900/20 flex items-center justify-center flex-shrink-0">
-                                  {booking.bookingType === "destination" ? <MapPin size={14} className="text-amber-400" /> : <Package size={14} className="text-amber-400" />}
+                                <div className="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+                                  {booking.bookingType === "destination" ? <MapPin size={14} className="text-amber-600" /> : <Package size={14} className="text-amber-600" />}
                                 </div>
                               )}
                               <div>
-                                <p className="text-white text-sm">{tripName || "—"}</p>
-                                <p className="text-amber-100/30 text-xs capitalize">{booking.bookingType}</p>
+                                <p className="text-stone-900 text-sm">{tripName || "—"}</p>
+                                <p className="text-stone-400 text-xs capitalize">{booking.bookingType}</p>
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-amber-100/60 text-sm">
+                          <td className="px-6 py-4 text-stone-500 text-sm">
                             {new Date(booking.departureDate).toLocaleDateString()}
                           </td>
-                          <td className="px-6 py-4 text-amber-100/60 text-sm">
+                          <td className="px-6 py-4 text-stone-500 text-sm">
                             {booking.totalTravelers}
                           </td>
                           <td className="px-6 py-4">
-                            <span className="text-amber-400 font-bold text-sm">${booking.totalAmount?.toLocaleString()}</span>
+                            <span className="text-amber-600 font-bold text-sm">${booking.totalAmount?.toLocaleString()}</span>
                           </td>
                           <td className="px-6 py-4">
                             <span className={`px-3 py-1 rounded-full text-xs font-bold capitalize border ${STATUS_COLORS[booking.status]}`}>
@@ -505,13 +505,13 @@ export default function BookingsAdmin() {
                             <div className="flex items-center justify-end gap-2">
                               <button
                                 onClick={() => setSelectedBooking(booking)}
-                                className="cursor-pointer p-2.5 text-amber-100/30 hover:text-amber-400 hover:bg-amber-400/10 rounded-xl transition-all"
+                                className="cursor-pointer p-2.5 text-stone-300 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all"
                               >
                                 <Eye size={16} />
                               </button>
                               <button
                                 onClick={() => setDeleteTarget(booking._id)}
-                                className="cursor-pointer p-2.5 text-red-400/30 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                                className="cursor-pointer p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                               >
                                 <Trash2 size={16} />
                               </button>
@@ -527,7 +527,7 @@ export default function BookingsAdmin() {
           )}
         </div>
 
-        <p className="text-amber-100/30 text-sm mt-4 text-right">
+        <p className="text-stone-400 text-sm mt-4 text-right">
           Showing {filtered.length} of {bookings.length} bookings
         </p>
       </div>

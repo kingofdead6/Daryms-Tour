@@ -56,6 +56,11 @@ export default function AdminDashboard() {
       path: "/admin/contact",
       title: "Manage Contact Messages",
       description: "View and respond to customer inquiries"
+    },
+    {
+      path: "/admin/finance",
+      title: "Finance",
+      description: "Track income, expenses, and net profit"
     }
   ];
 
@@ -83,8 +88,8 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0c0a08] flex items-center justify-center">
-        <p className="text-amber-100/70 text-xl font-light tracking-widest">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+        <p className="text-stone-500 text-xl font-light tracking-widest">
           Preparing the space...
         </p>
       </div>
@@ -96,38 +101,38 @@ export default function AdminDashboard() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen py-20 pt-32 relative bg-gradient-to-b from-[#0c0a08] via-[#1a1612] to-[#0f0c0a] overflow-hidden"
+      className="min-h-screen py-20 pt-32 relative bg-gradient-to-b from-stone-50 via-white to-stone-100 overflow-hidden"
     >
       {/* Subtle background texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(#2a241f_0.8px,transparent_1px)] bg-[length:70px_70px] opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#e7e0d6_0.8px,transparent_1px)] bg-[length:70px_70px] opacity-60 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        
+
         {/* Header */}
         <div className="text-center mb-20">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-amber-400 text-sm tracking-[4px] uppercase font-light mb-4"
+            className="text-amber-600 text-sm tracking-[4px] uppercase font-light mb-4"
           >
             Administration
           </motion.div>
-          
+
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
-            className="text-5xl md:text-7xl font-serif tracking-wider text-white"
+            className="text-5xl md:text-7xl font-serif tracking-wider text-stone-900"
           >
             {userType === "superadmin" ? "Master Control" : "Control Center"}
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="mt-6 text-2xl text-amber-100/70 font-light max-w-2xl mx-auto"
+            className="mt-6 text-2xl text-stone-500 font-light max-w-2xl mx-auto"
           >
             Everything in its place.<br />
             Every detail attended to.
@@ -151,23 +156,23 @@ export default function AdminDashboard() {
               className="group"
             >
               <Link to={section.path}>
-                <div className="bg-[#1a1612] border border-amber-900/30 rounded-3xl p-10 h-full flex flex-col justify-between transition-all duration-500 hover:border-amber-400/30 hover:shadow-2xl">
+                <div className="bg-white border border-stone-200 rounded-3xl p-10 h-full flex flex-col justify-between transition-all duration-500 hover:border-amber-400/50 hover:shadow-2xl shadow-sm">
                   <div>
-                    <h2 className="text-3xl font-serif tracking-wide text-white group-hover:text-amber-100 transition-colors">
+                    <h2 className="text-3xl font-serif tracking-wide text-stone-900 group-hover:text-amber-700 transition-colors">
                       {section.title}
                     </h2>
-                    <p className="mt-6 text-amber-100/70 font-light leading-relaxed text-lg">
+                    <p className="mt-6 text-stone-500 font-light leading-relaxed text-lg">
                       {section.description}
                     </p>
                   </div>
 
                   <div className="mt-12 flex justify-end">
-                    <span className="inline-flex items-center text-sm uppercase tracking-[2px] font-light text-amber-400 group-hover:text-amber-300 transition-all">
+                    <span className="inline-flex items-center text-sm uppercase tracking-[2px] font-light text-amber-600 group-hover:text-amber-700 transition-all">
                       Enter
-                      <svg 
-                        className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" 
-                        fill="none" 
-                        stroke="currentColor" 
+                      <svg
+                        className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
@@ -182,11 +187,11 @@ export default function AdminDashboard() {
 
         {/* Closing poetic line + Logout */}
         <div className="mt-28 text-center">
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="text-amber-100/60 text-lg tracking-wide max-w-md mx-auto font-light"
+            className="text-stone-400 text-lg tracking-wide max-w-md mx-auto font-light"
           >
             In this space, order becomes the only luxury.
           </motion.p>
@@ -195,7 +200,7 @@ export default function AdminDashboard() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleLogout}
-            className="mt-12 px-14 py-5 bg-transparent border border-amber-900/50 hover:border-amber-400/50 text-amber-100/80 hover:text-white text-lg font-light tracking-widest rounded-2xl transition-all duration-300"
+            className="mt-12 px-14 py-5 bg-transparent border border-stone-300 hover:border-amber-400/50 text-stone-600 hover:text-stone-900 text-lg font-light tracking-widest rounded-2xl transition-all duration-300"
           >
             Return to Stillness
           </motion.button>

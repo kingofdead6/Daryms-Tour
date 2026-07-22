@@ -9,6 +9,9 @@ import destinationRoutes from './Routes/Destinationroutes.js';
 import packageRoutes from './Routes/PackageRoutes.js';
 import bookingRoutes from './Routes/BookingRoutes.js';
 import contactRoutes from './Routes/ContactRoutes.js';
+import expenseRoutes from './Routes/ExpenseRoutes.js';
+import incomeRoutes from './Routes/IncomeRoutes.js';
+import financeRoutes from './Routes/FinanceRoutes.js';
 
 dotenv.config();
 
@@ -27,7 +30,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', bookingRoutes); 
-app.use('/api/contacts', contactRoutes); 
+app.use('/api/contacts', contactRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/income', incomeRoutes);
+app.use('/api/finance', financeRoutes);
 
 app.use(errorHandler);
 

@@ -101,30 +101,30 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
         }
     };
 
-    const inputCls = "w-full bg-black/40 border border-amber-900/20 rounded-2xl p-4 text-white outline-none focus:border-amber-400/50 transition-all placeholder-amber-100/20";
-    const selectCls = "w-full bg-black/40 border border-amber-900/20 rounded-2xl p-4 text-white outline-none focus:border-amber-400/50 appearance-none";
+    const inputCls = "w-full bg-stone-50 border border-stone-200 rounded-2xl p-4 text-stone-900 outline-none focus:border-amber-400 transition-all placeholder-stone-300";
+    const selectCls = "w-full bg-stone-50 border border-stone-200 rounded-2xl p-4 text-stone-900 outline-none focus:border-amber-400 appearance-none";
 
     return (
         <motion.div
-            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] flex items-center justify-center p-6"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         >
             <motion.div
-                className="bg-[#110e0c] border border-amber-900/30 rounded-[2.5rem] p-10 max-w-2xl w-full shadow-2xl overflow-y-auto max-h-[90vh]"
+                className="bg-white border border-stone-200 rounded-[2.5rem] p-10 max-w-2xl w-full shadow-2xl overflow-y-auto max-h-[90vh]"
                 initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
             >
                 <div className="flex justify-between items-center mb-10">
-                    <h2 className="text-4xl font-serif text-white">
+                    <h2 className="text-4xl font-serif text-stone-900">
                         {mode === "edit" ? "Edit Destination" : "New Destination"}
                     </h2>
-                    <button onClick={onClose} className="cursor-pointer text-amber-100/40 hover:text-white transition-colors">
+                    <button onClick={onClose} className="cursor-pointer text-stone-400 hover:text-stone-900 transition-colors">
                         <X size={32} />
                     </button>
                 </div>
 
                 <div className="space-y-6">
                     <div
-                        className="relative h-48 rounded-3xl border-2 border-dashed border-amber-900/30 hover:border-amber-400/50 transition-colors cursor-pointer overflow-hidden group"
+                        className="relative h-48 rounded-3xl border-2 border-dashed border-stone-200 hover:border-amber-400 transition-colors cursor-pointer overflow-hidden group"
                         onClick={() => fileRef.current.click()}
                     >
                         {imagePreviews.length > 0 ? (
@@ -142,7 +142,7 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex flex-col items-center justify-center h-full text-amber-100/30 group-hover:text-amber-400 transition-colors">
+                            <div className="flex flex-col items-center justify-center h-full text-stone-300 group-hover:text-amber-500 transition-colors">
                                 <Upload size={28} className="mb-2" />
                                 <p className="text-xs uppercase tracking-widest">Upload Destination Images</p>
                             </div>
@@ -152,12 +152,12 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Destination Name</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Destination Name</label>
                             <input className={inputCls} placeholder="e.g. Santorini" value={form.name}
                                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
                         </div>
                         <div>
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Country</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Country</label>
                             <input className={inputCls} placeholder="e.g. Greece" value={form.country}
                                 onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))} />
                         </div>
@@ -165,14 +165,14 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Continent</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Continent</label>
                             <select className={selectCls} value={form.continent}
                                 onChange={(e) => setForm((f) => ({ ...f, continent: e.target.value }))}>
                                 {CONTINENTS.map((c) => <option key={c}>{c}</option>)}
                             </select>
                         </div>
                         <div>
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Trip Type</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Trip Type</label>
                             <select className={selectCls} value={form.type}
                                 onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}>
                                 {TYPES.map((t) => <option key={t}>{t}</option>)}
@@ -182,12 +182,12 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Price (per person $)</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Price (per person $)</label>
                             <input type="number" min="0" className={inputCls} placeholder="1200" value={form.price}
                                 onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} />
                         </div>
                         <div>
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Initial Status</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Initial Status</label>
                             <select className={selectCls} value={form.isVisible}
                                 onChange={(e) => setForm((f) => ({ ...f, isVisible: e.target.value === "true" }))}>
                                 <option value="true">Visible to Public</option>
@@ -197,32 +197,32 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
                     </div>
 
                     <div>
-                        <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Description</label>
+                        <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Description</label>
                         <textarea className={inputCls} placeholder="Describe the destination..." value={form.description}
                             onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} rows={3} />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Duration</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Duration</label>
                             <input className={inputCls} placeholder="e.g. 7 days" value={form.duration}
                                 onChange={(e) => setForm((f) => ({ ...f, duration: e.target.value }))} />
                         </div>
                         <div className="flex items-center">
-                            <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1 mr-4">Guided Tour</label>
+                            <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1 mr-4">Guided Tour</label>
                             <input type="checkbox" checked={form.guided}
                                 onChange={(e) => setForm((f) => ({ ...f, guided: e.target.checked }))} />
                         </div>
                     </div>
 
                     <div>
-                        <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Includes (comma separated)</label>
+                        <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Includes (comma separated)</label>
                         <textarea className={inputCls} placeholder="e.g. Accommodation, Meals, Transport" value={tempIncludes}
                             onChange={(e) => setTempIncludes(e.target.value)} rows={2} />
                     </div>
 
                     <div>
-                        <label className="text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1">Itinerary / Plan (comma separated)</label>
+                        <label className="text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1">Itinerary / Plan (comma separated)</label>
                         <textarea className={inputCls} placeholder="e.g. Day 1: Arrival, Day 2: City Tour" value={tempPlan}
                             onChange={(e) => setTempPlan(e.target.value)} rows={2} />
                     </div>
@@ -230,7 +230,7 @@ function DestinationModal({ mode, destination, onClose, onSaved }) {
                     <button
                         disabled={submitting}
                         onClick={handleSubmit}
-                        className="cursor-pointer w-full bg-amber-400 text-black py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:bg-amber-300 disabled:opacity-50 transition-all shadow-xl shadow-amber-400/10"
+                        className="cursor-pointer w-full bg-amber-500 text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:bg-amber-600 disabled:opacity-50 transition-all shadow-xl shadow-amber-400/10"
                     >
                         {submitting ? "Saving..." : mode === "edit" ? "Save Changes" : "Create Destination"}
                     </button>
@@ -324,7 +324,7 @@ export default function DestinationsAdmin() {
     };
 
     return (
-        <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen relative pt-10">
+        <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen relative pt-10 bg-stone-50">
 
             <AnimatePresence>
                 {(modal === "create" || modal === "edit") && (
@@ -340,21 +340,21 @@ export default function DestinationsAdmin() {
             <AnimatePresence>
                 {deleteTarget && (
                     <motion.div
-                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                     >
                         <motion.div
-                            className="bg-[#110e0c] border border-red-900/30 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl"
+                            className="bg-white border border-red-200 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl"
                             initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
                         >
-                            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Trash2 size={26} className="text-red-400" />
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Trash2 size={26} className="text-red-500" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2">Delete Destination?</h3>
-                            <p className="text-amber-100/40 text-sm mb-6">This cannot be undone.</p>
+                            <h3 className="text-xl font-bold text-stone-900 mb-2">Delete Destination?</h3>
+                            <p className="text-stone-400 text-sm mb-6">This cannot be undone.</p>
                             <div className="flex gap-3">
                                 <button onClick={() => setDeleteTarget(null)}
-                                    className="flex-1 py-3 rounded-2xl border border-amber-900/30 text-amber-100/60 hover:text-white transition-all font-semibold">
+                                    className="flex-1 py-3 rounded-2xl border border-stone-200 text-stone-500 hover:text-stone-900 transition-all font-semibold">
                                     Cancel
                                 </button>
                                 <button onClick={() => handleDelete(deleteTarget)}
@@ -373,15 +373,15 @@ export default function DestinationsAdmin() {
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
                     <div>
                         <Link to="/admin/dashboard"
-                            className="text-amber-400 hover:text-amber-300 text-sm tracking-widest uppercase flex items-center gap-2 mb-4">
+                            className="text-amber-600 hover:text-amber-700 text-sm tracking-widest uppercase flex items-center gap-2 mb-4">
                             <ArrowLeft size={18} /> Dashboard
                         </Link>
-                        <h1 className="text-5xl md:text-7xl font-serif text-white">Destinations</h1>
-                        <p className="text-amber-100/60 text-xl mt-4">Manage your travel portfolio.</p>
+                        <h1 className="text-5xl md:text-7xl font-serif text-stone-900">Destinations</h1>
+                        <p className="text-stone-500 text-xl mt-4">Manage your travel portfolio.</p>
                     </div>
                     <button
                         onClick={() => setModal("create")}
-                        className="cursor-pointer bg-amber-400 text-black px-8 py-4 rounded-2xl flex items-center gap-3 font-medium hover:bg-amber-300 transition-all hover:scale-105 active:scale-95"
+                        className="cursor-pointer bg-amber-500 text-white px-8 py-4 rounded-2xl flex items-center gap-3 font-medium hover:bg-amber-600 transition-all hover:scale-105 active:scale-95"
                     >
                         <Plus size={24} /> Add Destination
                     </button>
@@ -390,14 +390,14 @@ export default function DestinationsAdmin() {
                 {/* Stats — popular replaces avg price */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-12">
                     {[
-                        { icon: <LayoutGrid size={18} />, label: "Total", value: stats.total, color: "text-white" },
-                        { icon: <Eye size={18} />, label: "Visible", value: stats.visible, color: "text-emerald-400" },
-                        { icon: <Star size={18} />, label: "Popular", value: stats.popular, color: "text-yellow-400" },
-                        { icon: <Globe size={18} />, label: "Continents", value: stats.continents, color: "text-[#60A5FA]" },
+                        { icon: <LayoutGrid size={18} />, label: "Total", value: stats.total, color: "text-stone-900" },
+                        { icon: <Eye size={18} />, label: "Visible", value: stats.visible, color: "text-emerald-600" },
+                        { icon: <Star size={18} />, label: "Popular", value: stats.popular, color: "text-yellow-600" },
+                        { icon: <Globe size={18} />, label: "Continents", value: stats.continents, color: "text-blue-600" },
                     ].map(({ icon, label, value, color }) => (
-                        <div key={label} className="bg-[#1a1612] border border-amber-900/20 rounded-3xl p-6">
-                            <div className="text-amber-100/30 mb-2">{icon}</div>
-                            <p className="text-amber-100/40 text-[10px] uppercase tracking-[0.2em] mb-1">{label}</p>
+                        <div key={label} className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm">
+                            <div className="text-stone-300 mb-2">{icon}</div>
+                            <p className="text-stone-400 text-[10px] uppercase tracking-[0.2em] mb-1">{label}</p>
                             <p className={`text-3xl font-bold ${color}`}>{value}</p>
                         </div>
                     ))}
@@ -406,18 +406,18 @@ export default function DestinationsAdmin() {
                 {/* Filters */}
                 <div className="flex flex-col lg:flex-row gap-5 items-start lg:items-center justify-between mb-10">
                     <div className="relative max-w-md w-full">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/50" size={18} />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
                         <input
                             type="text"
                             placeholder="Search destinations or countries..."
-                            className="w-full bg-[#1a1612] border border-amber-900/20 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-amber-400/50 transition-all placeholder-amber-100/20"
+                            className="w-full bg-white border border-stone-200 rounded-2xl py-4 pl-12 pr-4 text-stone-900 outline-none focus:border-amber-400 transition-all placeholder-stone-300 shadow-sm"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
-                        <div className="flex items-center gap-2 pr-4 border-r border-amber-900/20 mr-1 text-amber-400/60">
+                        <div className="flex items-center gap-2 pr-4 border-r border-stone-200 mr-1 text-amber-600/70">
                             <Filter size={14} />
                             <span className="text-xs uppercase tracking-widest">Filter</span>
                         </div>
@@ -426,8 +426,8 @@ export default function DestinationsAdmin() {
                                 onClick={() => setSelectedContinent(c)}
                                 className={`cursor-pointer px-4 py-2 rounded-full border transition-all whitespace-nowrap text-xs font-medium ${
                                     selectedContinent === c
-                                        ? "bg-amber-400 border-amber-400 text-black"
-                                        : "bg-[#1a1612] border-amber-900/20 text-amber-100/60 hover:border-amber-400/50 hover:text-amber-400"
+                                        ? "bg-amber-500 border-amber-500 text-white"
+                                        : "bg-white border-stone-200 text-stone-500 hover:border-amber-400 hover:text-amber-600"
                                 }`}
                             >
                                 {c === "all" ? "All" : c}
@@ -437,19 +437,19 @@ export default function DestinationsAdmin() {
                 </div>
 
                 {/* Table */}
-                <div className="bg-[#1a1612] border border-amber-900/20 rounded-3xl overflow-hidden shadow-2xl">
+                <div className="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-sm">
                     {loading ? (
-                        <div className="flex items-center justify-center py-24 text-amber-400">
+                        <div className="flex items-center justify-center py-24 text-amber-500">
                             <Loader2 size={36} className="animate-spin" />
                         </div>
                     ) : filtered.length === 0 ? (
-                        <div className="py-24 text-center text-amber-100/30 italic">
-                            <MapPin size={36} className="mx-auto mb-3 opacity-30" />
+                        <div className="py-24 text-center text-stone-300 italic">
+                            <MapPin size={36} className="mx-auto mb-3 opacity-50" />
                             No destinations found.
                         </div>
                     ) : (
                         <table className="w-full text-left">
-                            <thead className="bg-[#0c0a08] text-amber-100/40 text-[10px] uppercase tracking-[0.2em]">
+                            <thead className="bg-stone-50 text-stone-400 text-[10px] uppercase tracking-[0.2em]">
                                 <tr>
                                     <th className="px-8 py-6">Destination</th>
                                     <th className="px-8 py-6">Location</th>
@@ -460,7 +460,7 @@ export default function DestinationsAdmin() {
                                     <th className="px-8 py-6 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-amber-900/10">
+                            <tbody className="divide-y divide-stone-100">
                                 <AnimatePresence>
                                     {filtered.map((dest, i) => (
                                         <motion.tr
@@ -469,14 +469,14 @@ export default function DestinationsAdmin() {
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: 10 }}
                                             transition={{ delay: i * 0.04 }}
-                                            className="group hover:bg-white/[0.02] transition-colors"
+                                            className="group hover:bg-stone-50 transition-colors"
                                         >
                                             {/* Image + Name */}
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-5">
                                                     <div className="relative flex-shrink-0">
                                                         <img src={dest.image} alt={dest.name}
-                                                            className="w-16 h-16 rounded-2xl object-cover border border-amber-900/20" />
+                                                            className="w-16 h-16 rounded-2xl object-cover border border-stone-200" />
                                                         {/* Popular badge on thumbnail */}
                                                         {dest.isPopular && (
                                                             <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
@@ -484,13 +484,13 @@ export default function DestinationsAdmin() {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <span className="text-white font-serif text-lg">{dest.name}</span>
+                                                    <span className="text-stone-900 font-serif text-lg">{dest.name}</span>
                                                 </div>
                                             </td>
 
                                             {/* Location */}
                                             <td className="px-8 py-5">
-                                                <div className="flex items-center gap-1 text-amber-100/40 text-xs">
+                                                <div className="flex items-center gap-1 text-stone-400 text-xs">
                                                     <MapPin size={12} />
                                                     {dest.country}, {dest.continent}
                                                 </div>
@@ -498,14 +498,14 @@ export default function DestinationsAdmin() {
 
                                             {/* Type */}
                                             <td className="px-8 py-5">
-                                                <span className="text-amber-400 text-xs tracking-widest uppercase py-1 px-3 bg-amber-400/5 rounded-lg border border-amber-400/10">
+                                                <span className="text-amber-700 text-xs tracking-widest uppercase py-1 px-3 bg-amber-50 rounded-lg border border-amber-200">
                                                     {dest.type}
                                                 </span>
                                             </td>
 
                                             {/* Price */}
                                             <td className="px-8 py-5">
-                                                <span className="text-white font-bold text-sm">${dest.price.toLocaleString()}</span>
+                                                <span className="text-stone-900 font-bold text-sm">${dest.price.toLocaleString()}</span>
                                             </td>
 
                                             {/* Visibility toggle */}
@@ -513,7 +513,7 @@ export default function DestinationsAdmin() {
                                                 <div className="flex justify-center">
                                                     <button
                                                         onClick={() => handleToggleVisibility(dest._id)}
-                                                        className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${dest.isVisible ? "text-emerald-400" : "text-white/10"}`}
+                                                        className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${dest.isVisible ? "text-emerald-600" : "text-stone-300"}`}
                                                     >
                                                         {dest.isVisible ? <Eye size={20} /> : <EyeOff size={20} />}
                                                         <span className="text-[9px] uppercase font-bold tracking-tighter">
@@ -531,13 +531,13 @@ export default function DestinationsAdmin() {
                                                         title={dest.isPopular ? "Remove from Popular" : "Mark as Popular"}
                                                         className={`cursor-pointer flex flex-col items-center gap-1 transition-all group/star ${
                                                             dest.isPopular
-                                                                ? "text-yellow-400"
-                                                                : "text-white/10 hover:text-yellow-400/50"
+                                                                ? "text-yellow-500"
+                                                                : "text-stone-300 hover:text-yellow-400"
                                                         }`}
                                                     >
                                                         <Star
                                                             size={20}
-                                                            className={dest.isPopular ? "fill-yellow-400" : "group-hover/star:fill-yellow-400/30"}
+                                                            className={dest.isPopular ? "fill-yellow-400" : "group-hover/star:fill-yellow-200"}
                                                         />
                                                         <span className="text-[9px] uppercase font-bold tracking-tighter">
                                                             {dest.isPopular ? "Featured" : "Normal"}
@@ -551,13 +551,13 @@ export default function DestinationsAdmin() {
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button
                                                         onClick={() => { setEditing(dest); setModal("edit"); }}
-                                                        className="cursor-pointer p-3 text-amber-100/30 hover:text-amber-400 hover:bg-amber-400/10 rounded-xl transition-all"
+                                                        className="cursor-pointer p-3 text-stone-300 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all"
                                                     >
                                                         <Pencil size={18} />
                                                     </button>
                                                     <button
                                                         onClick={() => setDeleteTarget(dest._id)}
-                                                        className="cursor-pointer p-3 text-red-400/30 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                                                        className="cursor-pointer p-3 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                                                     >
                                                         <Trash2 size={18} />
                                                     </button>

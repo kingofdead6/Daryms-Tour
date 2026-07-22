@@ -24,6 +24,7 @@ import PackagesAdmin from "./Components/Admin/Packagesadmin";
 import BookingsAdmin from "./Components/Admin/Bookingsadmin";
 import ContactPage from "./Pages/ContactPage";
 import AdminContacts from "./Components/Admin/AdminContact";
+import AdminFinance from "./Components/Admin/AdminFinance";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           <Route path="/admin/packages" element={<PackagesAdmin />} />
           <Route path="/admin/bookings" element={<BookingsAdmin />} />
           <Route path="/admin/contact" element={<AdminContacts />} />
+          <Route path="/admin/finance" element={<AdminFinance />} />
         </Route>
 
         {/* 404 Route */}

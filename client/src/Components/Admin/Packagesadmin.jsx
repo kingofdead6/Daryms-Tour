@@ -102,24 +102,24 @@ function PackageModal({ mode, pkg, onClose, onSaved }) {
     }
   };
 
-  const inputCls = "w-full bg-black/40 border border-amber-900/20 rounded-2xl p-4 text-white outline-none focus:border-amber-400/50 transition-all placeholder-amber-100/20";
-  const selectCls = "w-full bg-black/40 border border-amber-900/20 rounded-2xl p-4 text-white outline-none focus:border-amber-400/50 appearance-none";
-  const labelCls = "text-amber-400 text-xs uppercase tracking-widest block mb-2 ml-1";
+  const inputCls = "w-full bg-stone-50 border border-stone-200 rounded-2xl p-4 text-stone-900 outline-none focus:border-amber-400 transition-all placeholder-stone-300";
+  const selectCls = "w-full bg-stone-50 border border-stone-200 rounded-2xl p-4 text-stone-900 outline-none focus:border-amber-400 appearance-none";
+  const labelCls = "text-amber-600 text-xs uppercase tracking-widest block mb-2 ml-1";
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] flex items-center justify-center p-6"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-[#110e0c] border border-amber-900/30 rounded-[2.5rem] p-10 max-w-2xl w-full shadow-2xl overflow-y-auto max-h-[90vh]"
+        className="bg-white border border-stone-200 rounded-[2.5rem] p-10 max-w-2xl w-full shadow-2xl overflow-y-auto max-h-[90vh]"
         initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
       >
         <div className="flex justify-between items-center mb-10">
-          <h2 className="text-4xl font-serif text-white">
+          <h2 className="text-4xl font-serif text-stone-900">
             {mode === "edit" ? "Edit Package" : "New Package"}
           </h2>
-          <button onClick={onClose} className="cursor-pointer text-amber-100/40 hover:text-white transition-colors">
+          <button onClick={onClose} className="cursor-pointer text-stone-400 hover:text-stone-900 transition-colors">
             <X size={32} />
           </button>
         </div>
@@ -127,7 +127,7 @@ function PackageModal({ mode, pkg, onClose, onSaved }) {
         <div className="space-y-6">
           {/* Image upload */}
           <div
-            className="relative h-48 rounded-3xl border-2 border-dashed border-amber-900/30 hover:border-amber-400/50 transition-colors cursor-pointer overflow-hidden group"
+            className="relative h-48 rounded-3xl border-2 border-dashed border-stone-200 hover:border-amber-400 transition-colors cursor-pointer overflow-hidden group"
             onClick={() => fileRef.current.click()}
           >
             {imagePreviews.length > 0 ? (
@@ -145,7 +145,7 @@ function PackageModal({ mode, pkg, onClose, onSaved }) {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-amber-100/30 group-hover:text-amber-400 transition-colors">
+              <div className="flex flex-col items-center justify-center h-full text-stone-300 group-hover:text-amber-500 transition-colors">
                 <Upload size={28} className="mb-2" />
                 <p className="text-xs uppercase tracking-widest">Upload Package Images</p>
               </div>
@@ -261,7 +261,7 @@ function PackageModal({ mode, pkg, onClose, onSaved }) {
                 <input type="checkbox" checked={form.isFeatured}
                   onChange={(e) => setForm((f) => ({ ...f, isFeatured: e.target.checked }))}
                   className="w-5 h-5 rounded" />
-                <span className="text-amber-100/60 text-sm">Featured</span>
+                <span className="text-stone-500 text-sm">Featured</span>
               </label>
             </div>
             <div className="flex flex-col justify-center">
@@ -270,7 +270,7 @@ function PackageModal({ mode, pkg, onClose, onSaved }) {
                 <input type="checkbox" checked={form.isPopular}
                   onChange={(e) => setForm((f) => ({ ...f, isPopular: e.target.checked }))}
                   className="w-5 h-5 rounded" />
-                <span className="text-amber-100/60 text-sm">Popular</span>
+                <span className="text-stone-500 text-sm">Popular</span>
               </label>
             </div>
           </div>
@@ -278,7 +278,7 @@ function PackageModal({ mode, pkg, onClose, onSaved }) {
           <button
             disabled={submitting}
             onClick={handleSubmit}
-            className="cursor-pointer w-full bg-amber-400 text-black py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:bg-amber-300 disabled:opacity-50 transition-all shadow-xl shadow-amber-400/10"
+            className="cursor-pointer w-full bg-amber-500 text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:bg-amber-600 disabled:opacity-50 transition-all shadow-xl shadow-amber-400/10"
           >
             {submitting ? "Saving..." : mode === "edit" ? "Save Changes" : "Create Package"}
           </button>
@@ -363,7 +363,7 @@ export default function PackagesAdmin() {
   };
 
   return (
-    <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen relative pt-10">
+    <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen relative pt-10 bg-stone-50">
 
       <AnimatePresence>
         {(modal === "create" || modal === "edit") && (
@@ -377,17 +377,17 @@ export default function PackagesAdmin() {
 
       <AnimatePresence>
         {deleteTarget && (
-          <motion.div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
+          <motion.div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <motion.div className="bg-[#110e0c] border border-red-900/30 rounded-3xl p-8 max-w-sm w-full text-center"
+            <motion.div className="bg-white border border-red-200 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl"
               initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}>
-              <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Trash2 size={26} className="text-red-400" />
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Trash2 size={26} className="text-red-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Delete Package?</h3>
-              <p className="text-amber-100/40 text-sm mb-6">This cannot be undone.</p>
+              <h3 className="text-xl font-bold text-stone-900 mb-2">Delete Package?</h3>
+              <p className="text-stone-400 text-sm mb-6">This cannot be undone.</p>
               <div className="flex gap-3">
-                <button onClick={() => setDeleteTarget(null)} className="flex-1 py-3 rounded-2xl border border-amber-900/30 text-amber-100/60 hover:text-white font-semibold">Cancel</button>
+                <button onClick={() => setDeleteTarget(null)} className="flex-1 py-3 rounded-2xl border border-stone-200 text-stone-500 hover:text-stone-900 font-semibold">Cancel</button>
                 <button onClick={() => handleDelete(deleteTarget)} className="flex-1 py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-bold">Delete</button>
               </div>
             </motion.div>
@@ -400,15 +400,15 @@ export default function PackagesAdmin() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
           <div>
-            <Link to="/admin/dashboard" className="text-amber-400 hover:text-amber-300 text-sm tracking-widest uppercase flex items-center gap-2 mb-4">
+            <Link to="/admin/dashboard" className="text-amber-600 hover:text-amber-700 text-sm tracking-widest uppercase flex items-center gap-2 mb-4">
               <ArrowLeft size={18} /> Dashboard
             </Link>
-            <h1 className="text-5xl md:text-7xl font-serif text-white">Packages</h1>
-            <p className="text-amber-100/60 text-xl mt-4">Manage your travel packages.</p>
+            <h1 className="text-5xl md:text-7xl font-serif text-stone-900">Packages</h1>
+            <p className="text-stone-500 text-xl mt-4">Manage your travel packages.</p>
           </div>
           <button
             onClick={() => setModal("create")}
-            className="cursor-pointer bg-amber-400 text-black px-8 py-4 rounded-2xl flex items-center gap-3 font-medium hover:bg-amber-300 transition-all hover:scale-105 active:scale-95"
+            className="cursor-pointer bg-amber-500 text-white px-8 py-4 rounded-2xl flex items-center gap-3 font-medium hover:bg-amber-600 transition-all hover:scale-105 active:scale-95"
           >
             <Plus size={24} /> Add Package
           </button>
@@ -417,14 +417,14 @@ export default function PackagesAdmin() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-12">
           {[
-            { icon: <LayoutGrid size={18} />, label: "Total", value: stats.total, color: "text-white" },
-            { icon: <Eye size={18} />, label: "Visible", value: stats.visible, color: "text-emerald-400" },
-            { icon: <Star size={18} />, label: "Featured", value: stats.featured, color: "text-yellow-400" },
-            { icon: <Flame size={18} />, label: "Popular", value: stats.popular, color: "text-orange-400" },
+            { icon: <LayoutGrid size={18} />, label: "Total", value: stats.total, color: "text-stone-900" },
+            { icon: <Eye size={18} />, label: "Visible", value: stats.visible, color: "text-emerald-600" },
+            { icon: <Star size={18} />, label: "Featured", value: stats.featured, color: "text-yellow-600" },
+            { icon: <Flame size={18} />, label: "Popular", value: stats.popular, color: "text-orange-600" },
           ].map(({ icon, label, value, color }) => (
-            <div key={label} className="bg-[#1a1612] border border-amber-900/20 rounded-3xl p-6">
-              <div className="text-amber-100/30 mb-2">{icon}</div>
-              <p className="text-amber-100/40 text-[10px] uppercase tracking-[0.2em] mb-1">{label}</p>
+            <div key={label} className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm">
+              <div className="text-stone-300 mb-2">{icon}</div>
+              <p className="text-stone-400 text-[10px] uppercase tracking-[0.2em] mb-1">{label}</p>
               <p className={`text-3xl font-bold ${color}`}>{value}</p>
             </div>
           ))}
@@ -433,10 +433,10 @@ export default function PackagesAdmin() {
         {/* Filters */}
         <div className="flex flex-col lg:flex-row gap-5 items-start lg:items-center justify-between mb-10">
           <div className="relative max-w-md w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/50" size={18} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
             <input
               type="text" placeholder="Search packages..."
-              className="w-full bg-[#1a1612] border border-amber-900/20 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-amber-400/50 transition-all placeholder-amber-100/20"
+              className="w-full bg-white border border-stone-200 rounded-2xl py-4 pl-12 pr-4 text-stone-900 outline-none focus:border-amber-400 transition-all placeholder-stone-300 shadow-sm"
               value={search} onChange={(e) => setSearch(e.target.value)}
             />
           </div>
@@ -445,7 +445,7 @@ export default function PackagesAdmin() {
               <button key={c}
                 onClick={() => setCategoryFilter(c)}
                 className={`cursor-pointer px-4 py-2 rounded-full border transition-all text-xs font-medium whitespace-nowrap ${
-                  categoryFilter === c ? "bg-amber-400 border-amber-400 text-black" : "bg-[#1a1612] border-amber-900/20 text-amber-100/60 hover:border-amber-400/50"
+                  categoryFilter === c ? "bg-amber-500 border-amber-500 text-white" : "bg-white border-stone-200 text-stone-500 hover:border-amber-400"
                 }`}>
                 {c === "all" ? "All" : c}
               </button>
@@ -454,19 +454,19 @@ export default function PackagesAdmin() {
         </div>
 
         {/* Table */}
-        <div className="bg-[#1a1612] border border-amber-900/20 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-sm">
           {loading ? (
-            <div className="flex items-center justify-center py-24 text-amber-400">
+            <div className="flex items-center justify-center py-24 text-amber-500">
               <Loader2 size={36} className="animate-spin" />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="py-24 text-center text-amber-100/30 italic">
-              <Package size={36} className="mx-auto mb-3 opacity-30" />
+            <div className="py-24 text-center text-stone-300 italic">
+              <Package size={36} className="mx-auto mb-3 opacity-50" />
               No packages found.
             </div>
           ) : (
             <table className="w-full text-left">
-              <thead className="bg-[#0c0a08] text-amber-100/40 text-[10px] uppercase tracking-[0.2em]">
+              <thead className="bg-stone-50 text-stone-400 text-[10px] uppercase tracking-[0.2em]">
                 <tr>
                   <th className="px-8 py-6">Package</th>
                   <th className="px-8 py-6">Category</th>
@@ -478,44 +478,44 @@ export default function PackagesAdmin() {
                   <th className="px-8 py-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-amber-900/10">
+              <tbody className="divide-y divide-stone-100">
                 <AnimatePresence>
                   {filtered.map((pkg, i) => (
                     <motion.tr
                       key={pkg._id}
                       initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                       transition={{ delay: i * 0.04 }}
-                      className="group hover:bg-white/[0.02] transition-colors"
+                      className="group hover:bg-stone-50 transition-colors"
                     >
                       <td className="px-8 py-5">
                         <div className="flex items-center gap-4">
                           <img
                             src={pkg.images?.[0] || "https://images.unsplash.com/photo-1488085061387-422e29b40080?w=200"}
                             alt={pkg.title}
-                            className="w-14 h-14 rounded-2xl object-cover border border-amber-900/20"
+                            className="w-14 h-14 rounded-2xl object-cover border border-stone-200"
                           />
                           <div>
-                            <p className="text-white font-serif text-base">{pkg.title}</p>
-                            {pkg.subtitle && <p className="text-amber-100/40 text-xs">{pkg.subtitle}</p>}
+                            <p className="text-stone-900 font-serif text-base">{pkg.title}</p>
+                            {pkg.subtitle && <p className="text-stone-400 text-xs">{pkg.subtitle}</p>}
                           </div>
                         </div>
                       </td>
                       <td className="px-8 py-5">
-                        <span className="text-amber-400 text-xs tracking-widest uppercase py-1 px-3 bg-amber-400/5 rounded-lg border border-amber-400/10">
+                        <span className="text-amber-700 text-xs tracking-widest uppercase py-1 px-3 bg-amber-50 rounded-lg border border-amber-200">
                           {pkg.category}
                         </span>
                       </td>
-                      <td className="px-8 py-5 text-amber-100/60 text-sm">{pkg.duration}</td>
+                      <td className="px-8 py-5 text-stone-500 text-sm">{pkg.duration}</td>
                       <td className="px-8 py-5">
-                        <span className="text-white font-bold text-sm">${pkg.price.toLocaleString()}</span>
+                        <span className="text-stone-900 font-bold text-sm">${pkg.price.toLocaleString()}</span>
                         {pkg.originalPrice && pkg.originalPrice > pkg.price && (
-                          <span className="text-amber-100/30 text-xs line-through ml-2">${pkg.originalPrice.toLocaleString()}</span>
+                          <span className="text-stone-300 text-xs line-through ml-2">${pkg.originalPrice.toLocaleString()}</span>
                         )}
                       </td>
                       <td className="px-8 py-5">
                         <div className="flex justify-center">
                           <button onClick={() => handleToggleVisibility(pkg._id)}
-                            className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${pkg.isVisible ? "text-emerald-400" : "text-white/10"}`}>
+                            className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${pkg.isVisible ? "text-emerald-600" : "text-stone-300"}`}>
                             {pkg.isVisible ? <Eye size={18} /> : <EyeOff size={18} />}
                             <span className="text-[9px] uppercase font-bold">{pkg.isVisible ? "Public" : "Hidden"}</span>
                           </button>
@@ -524,7 +524,7 @@ export default function PackagesAdmin() {
                       <td className="px-8 py-5">
                         <div className="flex justify-center">
                           <button onClick={() => handleToggleFeatured(pkg._id)}
-                            className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${pkg.isFeatured ? "text-yellow-400" : "text-white/10 hover:text-yellow-400/50"}`}>
+                            className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${pkg.isFeatured ? "text-yellow-500" : "text-stone-300 hover:text-yellow-400"}`}>
                             <Star size={18} className={pkg.isFeatured ? "fill-yellow-400" : ""} />
                             <span className="text-[9px] uppercase font-bold">{pkg.isFeatured ? "Featured" : "Normal"}</span>
                           </button>
@@ -533,7 +533,7 @@ export default function PackagesAdmin() {
                       <td className="px-8 py-5">
                         <div className="flex justify-center">
                           <button onClick={() => handleTogglePopular(pkg._id)}
-                            className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${pkg.isPopular ? "text-orange-400" : "text-white/10 hover:text-orange-400/50"}`}>
+                            className={`cursor-pointer flex flex-col items-center gap-1 transition-all ${pkg.isPopular ? "text-orange-500" : "text-stone-300 hover:text-orange-400"}`}>
                             <Flame size={18} className={pkg.isPopular ? "fill-orange-400" : ""} />
                             <span className="text-[9px] uppercase font-bold">{pkg.isPopular ? "Popular" : "Normal"}</span>
                           </button>
@@ -542,11 +542,11 @@ export default function PackagesAdmin() {
                       <td className="px-8 py-5 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button onClick={() => { setEditing(pkg); setModal("edit"); }}
-                            className="cursor-pointer p-3 text-amber-100/30 hover:text-amber-400 hover:bg-amber-400/10 rounded-xl transition-all">
+                            className="cursor-pointer p-3 text-stone-300 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all">
                             <Pencil size={16} />
                           </button>
                           <button onClick={() => setDeleteTarget(pkg._id)}
-                            className="cursor-pointer p-3 text-red-400/30 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all">
+                            className="cursor-pointer p-3 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
                             <Trash2 size={16} />
                           </button>
                         </div>
