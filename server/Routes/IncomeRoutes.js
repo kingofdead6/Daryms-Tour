@@ -6,8 +6,12 @@ import {
   updateIncome,
   deleteIncome,
 } from "../Controllers/IncomeController.js";
+import { protect, admin } from "../Middleware/auth.js";
 
 const router = express.Router();
+
+// Financial records are admin-only.
+router.use(protect, admin);
 
 // GET /api/income                → all income entries (with filters)
 router.get("/", getAllIncome);

@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Income from "../Models/Income.js";
 import Expense from "../Models/Expense.js";
+import Invoice from "../Models/Invoice.js";
 
 // ─── Finance summary: combines manually-entered income with expenses ────────
 export const getFinanceSummary = asyncHandler(async (req, res) => {
@@ -76,6 +77,36 @@ export const getFinanceSummary = asyncHandler(async (req, res) => {
     return { month, income, expenses, net: income - expenses };
   });
 
+  // What is still open on the invoice side — money owed to us, and money we owe.
+  const invoiceAgg = await Invoice.aggregate([
+    { $match: { status: { $nin: ["cancelled", "draft"] } } },
+    {
+      $group: {
+        _id: "$direction",
+        invoiced: { $sum: "$total" },
+        settled: { $sum: "$amountPaid" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const readInvoices = (direction) => {
+    const row = invoiceAgg.find((r) => r._id === direction);
+    const invoiced = Number((row?.invoiced || 0).toFixed(2));
+    const settled = Number((row?.settled || 0).toFixed(2));
+    return {
+      invoiced,
+      settled,
+      outstanding: Number((invoiced - settled).toFixed(2)),
+      count: row?.count || 0,
+    };
+  };
+
+  const payrollAgg = await Invoice.aggregate([
+    { $match: { category: "Employee Salary", status: { $ne: "cancelled" } } },
+    { $group: { _id: null, billed: { $sum: "$total" }, paid: { $sum: "$amountPaid" } } },
+  ]);
+
   res.status(200).json({
     year: targetYear,
     totalIncome,
@@ -86,5 +117,12 @@ export const getFinanceSummary = asyncHandler(async (req, res) => {
     monthlyBreakdown,
     incomeCount: await Income.countDocuments(),
     expensesCount: await Expense.countDocuments(),
+    receivables: readInvoices("incoming"),
+    payables: readInvoices("outgoing"),
+    payroll: {
+      billed: Number((payrollAgg[0]?.billed || 0).toFixed(2)),
+      paid: Number((payrollAgg[0]?.paid || 0).toFixed(2)),
+      outstanding: Number(((payrollAgg[0]?.billed || 0) - (payrollAgg[0]?.paid || 0)).toFixed(2)),
+    },
   });
 });

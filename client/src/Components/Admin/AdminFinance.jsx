@@ -2,14 +2,19 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
 import { toast } from "react-toastify";
-import { API_BASE_URL } from "../../../api";
 import {
-  ArrowLeft, Loader2, Trash2, Plus, X, TrendingUp, TrendingDown,
-  Wallet, PiggyBank, RefreshCw, Pencil, Receipt, ArrowDownCircle, ArrowUpCircle,
+  ArrowLeft, Loader2, Trash2, X, TrendingUp, TrendingDown,
+  PiggyBank, RefreshCw, Pencil, Receipt, ArrowDownCircle, ArrowUpCircle,
+  FileText, Users, Link2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import adminApi, { apiError, formatCurrency, MONTH_LABELS } from "./adminApi";
+import {
+  BarChart, ChartCard, HorizontalBarChart, StatTile, StatusPill,
+  SERIES_COLORS, STATUS_COLORS, FLOW_COLORS,
+} from "./Charts";
 
 const EXPENSE_CATEGORIES = [
   "Salaries",
@@ -37,13 +42,6 @@ const INCOME_CATEGORIES = [
 ];
 
 const PAYMENT_METHODS = ["bank_transfer", "cash", "credit_card", "paypal", "other"];
-
-const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-const CATEGORY_COLORS = [
-  "bg-amber-500", "bg-red-500", "bg-blue-500", "bg-emerald-500", "bg-purple-500",
-  "bg-pink-500", "bg-cyan-500", "bg-orange-500", "bg-lime-500", "bg-fuchsia-500", "bg-slate-500",
-];
 
 function emptyForm(type) {
   return {
@@ -96,15 +94,15 @@ function EntryModal({ type, initial, onClose, onSaved }) {
     };
     try {
       if (initial) {
-        const res = await axios.patch(`${API_BASE_URL}/${endpoint}/${initial._id}`, payload);
+        const res = await adminApi.patch(`/${endpoint}/${initial._id}`, payload);
         onSaved(res.data, true);
       } else {
-        const res = await axios.post(`${API_BASE_URL}/${endpoint}`, payload);
+        const res = await adminApi.post(`/${endpoint}`, payload);
         onSaved(res.data, false);
       }
       onClose();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to save entry");
+      toast.error(apiError(err, "Failed to save entry"));
     } finally {
       setSaving(false);
     }
@@ -242,9 +240,9 @@ export default function AdminFinance() {
     setLoading(true);
     try {
       const [summaryRes, incomeRes, expensesRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/finance/summary`, { params: { year } }),
-        axios.get(`${API_BASE_URL}/income`),
-        axios.get(`${API_BASE_URL}/expenses`),
+        adminApi.get("/finance/summary", { params: { year } }),
+        adminApi.get("/income"),
+        adminApi.get("/expenses"),
       ]);
       setSummary(summaryRes.data);
       setIncome(incomeRes.data);
@@ -265,7 +263,7 @@ export default function AdminFinance() {
     const { type, id } = deleteTarget;
     const endpoint = type === "income" ? "income" : "expenses";
     try {
-      await axios.delete(`${API_BASE_URL}/${endpoint}/${id}`);
+      await adminApi.delete(`/${endpoint}/${id}`);
       if (type === "income") setIncome((prev) => prev.filter((e) => e._id !== id));
       else setExpenses((prev) => prev.filter((e) => e._id !== id));
       toast.success(`${type === "income" ? "Income" : "Expense"} deleted`);
@@ -299,25 +297,54 @@ export default function AdminFinance() {
     return matchCategory && matchSearch;
   });
 
-  const maxMonthly = useMemo(() => {
-    if (!summary?.monthlyBreakdown) return 1;
-    return Math.max(1, ...summary.monthlyBreakdown.map((m) => Math.max(m.income, m.expenses)));
-  }, [summary]);
-
-  const totalIncomeCategorySpend = useMemo(() => {
-    if (!summary?.incomeByCategory) return 0;
-    return summary.incomeByCategory.reduce((sum, c) => sum + c.total, 0);
-  }, [summary]);
-
-  const totalExpenseCategorySpend = useMemo(() => {
-    if (!summary?.expensesByCategory) return 0;
-    return summary.expensesByCategory.reduce((sum, c) => sum + c.total, 0);
-  }, [summary]);
+  const activeCategoryBreakdown = useMemo(
+    () => (recordTab === "income" ? summary?.incomeByCategory : summary?.expensesByCategory) || [],
+    [summary, recordTab]
+  );
 
   const statCards = summary ? [
-    { icon: <TrendingUp size={18} />, label: "Total Income", value: `$${summary.totalIncome.toLocaleString()}`, color: "text-emerald-600", sub: `${summary.incomeCount} entries` },
-    { icon: <TrendingDown size={18} />, label: "Total Expenses", value: `$${summary.totalExpenses.toLocaleString()}`, color: "text-red-600", sub: `${summary.expensesCount} entries` },
-    { icon: <PiggyBank size={18} />, label: "Net Profit", value: `${summary.netProfit < 0 ? "-" : ""}$${Math.abs(summary.netProfit).toLocaleString()}`, color: summary.netProfit >= 0 ? "text-amber-600" : "text-red-600", sub: summary.netProfit >= 0 ? "Profitable" : "Operating at a loss" },
+    {
+      icon: <TrendingUp size={18} />,
+      label: "Total Income",
+      value: formatCurrency(summary.totalIncome, { compact: true }),
+      accent: FLOW_COLORS.in,
+      sub: `${summary.incomeCount} entries`,
+    },
+    {
+      icon: <TrendingDown size={18} />,
+      label: "Total Expenses",
+      value: formatCurrency(summary.totalExpenses, { compact: true }),
+      accent: FLOW_COLORS.out,
+      sub: `${summary.expensesCount} entries`,
+    },
+    {
+      icon: <PiggyBank size={18} />,
+      label: "Net Profit",
+      value: formatCurrency(summary.netProfit, { compact: true }),
+      accent: summary.netProfit >= 0 ? STATUS_COLORS.good : STATUS_COLORS.critical,
+      sub: summary.netProfit >= 0 ? "Profitable" : "Operating at a loss",
+    },
+    {
+      icon: <Receipt size={18} />,
+      label: "Owed to us",
+      value: formatCurrency(summary.receivables?.outstanding, { compact: true }),
+      accent: STATUS_COLORS.warning,
+      sub: `${formatCurrency(summary.receivables?.invoiced, { compact: true })} invoiced to clients`,
+    },
+    {
+      icon: <FileText size={18} />,
+      label: "Bills to pay",
+      value: formatCurrency(summary.payables?.outstanding, { compact: true }),
+      accent: SERIES_COLORS[1],
+      sub: `${formatCurrency(summary.payables?.invoiced, { compact: true })} billed to us`,
+    },
+    {
+      icon: <Users size={18} />,
+      label: "Payroll paid",
+      value: formatCurrency(summary.payroll?.paid, { compact: true }),
+      accent: SERIES_COLORS[0],
+      sub: `${formatCurrency(summary.payroll?.outstanding, { compact: true })} in salaries still owed`,
+    },
   ] : [];
 
   return (
@@ -376,12 +403,20 @@ export default function AdminFinance() {
               <ArrowLeft size={18} /> Dashboard
             </Link>
             <h1 className="text-5xl md:text-7xl font-serif text-stone-900">Finance</h1>
-            <p className="text-stone-500 text-xl mt-4">Manually track income, spending, and overall profitability.</p>
+            <p className="text-stone-500 text-xl mt-4">
+              The ledger — every dollar in and out, whether typed in by hand or posted from an invoice.
+            </p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <button onClick={fetchAll} className="cursor-pointer flex items-center gap-2 text-amber-600 hover:text-amber-700 transition-all">
               <RefreshCw size={18} /> Refresh
             </button>
+            <Link
+              to="/admin/invoices"
+              className="flex items-center gap-2 border border-stone-200 bg-white text-stone-600 hover:text-stone-900 hover:border-stone-300 px-6 py-3 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all"
+            >
+              <Receipt size={18} /> Invoices
+            </Link>
             <button
               onClick={() => { setEditTarget(null); setModalType("income"); }}
               className="cursor-pointer flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-2xl font-bold uppercase tracking-widest text-sm hover:bg-emerald-600 transition-all"
@@ -404,99 +439,81 @@ export default function AdminFinance() {
         ) : (
           <>
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
-              {statCards.map(({ icon, label, value, color, sub }) => (
-                <div key={label} className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm">
-                  <div className="text-stone-300 mb-2">{icon}</div>
-                  <p className="text-stone-400 text-[10px] uppercase tracking-[0.2em] mb-1">{label}</p>
-                  <p className={`text-2xl md:text-3xl font-bold ${color}`}>{value}</p>
-                  <p className="text-stone-400 text-xs mt-2">{sub}</p>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-12">
+              {statCards.map((card) => (
+                <StatTile key={card.label} {...card} />
               ))}
             </div>
 
             {/* Monthly chart + category breakdowns */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-              {/* Monthly bar chart */}
-              <div className="lg:col-span-2 bg-white border border-stone-200 rounded-3xl p-8 shadow-sm">
-                <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-xl font-serif text-stone-900">Income vs Expenses</h3>
+              <ChartCard
+                className="lg:col-span-2"
+                title="Income vs Expenses"
+                subtitle={`Everything recorded in ${year}`}
+                actions={
                   <select
                     value={year}
                     onChange={(e) => setYear(Number(e.target.value))}
                     className="bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 text-stone-900 text-sm outline-none focus:border-amber-400"
                   >
-                    {[0, 1, 2].map((offset) => {
-                      const y = new Date().getFullYear() - offset;
-                      return <option key={y} value={y}>{y}</option>;
+                    {[0, 1, 2, 3].map((offset) => {
+                      const value = new Date().getFullYear() - offset;
+                      return <option key={value} value={value}>{value}</option>;
                     })}
                   </select>
-                </div>
+                }
+                table={{
+                  columns: ["Month", "Income", "Expenses", "Net"],
+                  rows: (summary?.monthlyBreakdown || []).map((m) => [
+                    MONTH_LABELS[m.month - 1],
+                    formatCurrency(m.income),
+                    formatCurrency(m.expenses),
+                    formatCurrency(m.net),
+                  ]),
+                }}
+              >
+                <BarChart
+                  height={280}
+                  labels={MONTH_LABELS}
+                  formatValue={formatCurrency}
+                  formatTick={(value) => formatCurrency(value, { compact: true })}
+                  emptyMessage="Nothing recorded for this year yet."
+                  series={[
+                    {
+                      key: "income",
+                      label: "Income",
+                      color: FLOW_COLORS.in,
+                      data: (summary?.monthlyBreakdown || []).map((m) => m.income),
+                    },
+                    {
+                      key: "expenses",
+                      label: "Expenses",
+                      color: FLOW_COLORS.out,
+                      data: (summary?.monthlyBreakdown || []).map((m) => m.expenses),
+                    },
+                  ]}
+                />
+              </ChartCard>
 
-                <div className="flex items-end gap-2 md:gap-3 h-56">
-                  {summary?.monthlyBreakdown?.map((m) => (
-                    <div key={m.month} className="flex-1 flex flex-col items-center justify-end h-full gap-1 group relative">
-                      <div className="w-full flex items-end justify-center gap-0.5 h-full">
-                        <div
-                          className="w-1/2 bg-emerald-400 group-hover:bg-emerald-500 rounded-t-md transition-all"
-                          style={{ height: `${(m.income / maxMonthly) * 100}%`, minHeight: m.income > 0 ? "3px" : "0" }}
-                          title={`Income: $${m.income.toLocaleString()}`}
-                        />
-                        <div
-                          className="w-1/2 bg-red-400 group-hover:bg-red-500 rounded-t-md transition-all"
-                          style={{ height: `${(m.expenses / maxMonthly) * 100}%`, minHeight: m.expenses > 0 ? "3px" : "0" }}
-                          title={`Expenses: $${m.expenses.toLocaleString()}`}
-                        />
-                      </div>
-                      <span className="text-[10px] text-stone-400 uppercase tracking-wide">{MONTH_LABELS[m.month - 1]}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-6 mt-6 pt-6 border-t border-stone-200">
-                  <div className="flex items-center gap-2 text-xs text-stone-500">
-                    <span className="w-3 h-3 rounded bg-emerald-400 inline-block" /> Income
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-stone-500">
-                    <span className="w-3 h-3 rounded bg-red-400 inline-block" /> Expenses
-                  </div>
-                </div>
-              </div>
-
-              {/* Category breakdown (active tab) */}
-              <div className="bg-white border border-stone-200 rounded-3xl p-8 shadow-sm">
-                <h3 className="text-xl font-serif text-stone-900 mb-6">
-                  {recordTab === "income" ? "Income by Category" : "Spending by Category"}
-                </h3>
-                {(recordTab === "income" ? summary?.incomeByCategory : summary?.expensesByCategory)?.length ? (
-                  <div className="space-y-4">
-                    {(recordTab === "income" ? summary.incomeByCategory : summary.expensesByCategory).map((c, i) => {
-                      const totalForPct = recordTab === "income" ? totalIncomeCategorySpend : totalExpenseCategorySpend;
-                      const pct = totalForPct ? (c.total / totalForPct) * 100 : 0;
-                      return (
-                        <div key={c._id}>
-                          <div className="flex justify-between text-xs mb-1.5">
-                            <span className="text-stone-500">{c._id}</span>
-                            <span className="text-stone-900 font-semibold">${c.total.toLocaleString()}</span>
-                          </div>
-                          <div className="w-full bg-stone-100 rounded-full h-2 overflow-hidden">
-                            <div
-                              className={`h-full rounded-full ${CATEGORY_COLORS[i % CATEGORY_COLORS.length]}`}
-                              style={{ width: `${pct}%` }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="py-12 text-center text-stone-300 italic">
-                    <Receipt size={30} className="mx-auto mb-3 opacity-50" />
-                    No {recordTab === "income" ? "income" : "expenses"} recorded yet.
-                  </div>
-                )}
-              </div>
+              <ChartCard
+                title={recordTab === "income" ? "Income by Category" : "Spending by Category"}
+                subtitle="Across every entry recorded"
+                table={{
+                  columns: ["Category", "Total"],
+                  rows: (activeCategoryBreakdown || []).map((c) => [c._id, formatCurrency(c.total)]),
+                }}
+              >
+                <HorizontalBarChart
+                  color={recordTab === "income" ? FLOW_COLORS.in : FLOW_COLORS.out}
+                  formatValue={formatCurrency}
+                  maxRows={11}
+                  emptyMessage={`No ${recordTab === "income" ? "income" : "expenses"} recorded yet.`}
+                  rows={(activeCategoryBreakdown || []).map((c) => ({ label: c._id, value: c.total }))}
+                />
+              </ChartCard>
             </div>
+
 
             {/* Records */}
             <div className="flex flex-col lg:flex-row gap-5 items-start lg:items-center justify-between mb-8">
@@ -569,7 +586,16 @@ export default function AdminFinance() {
                             className="hover:bg-stone-50 transition-colors group"
                           >
                             <td className="px-6 py-4">
-                              <p className="text-stone-900 text-sm font-semibold">{entry.title}</p>
+                              <p className="text-stone-900 text-sm font-semibold flex items-center gap-2">
+                                {entry.title}
+                                {entry.invoice && (
+                                  <StatusPill tone="info">
+                                    <span className="flex items-center gap-1">
+                                      <Link2 size={11} /> From invoice
+                                    </span>
+                                  </StatusPill>
+                                )}
+                              </p>
                               {entry.notes && <p className="text-stone-400 text-xs mt-0.5">{entry.notes}</p>}
                             </td>
                             <td className="px-6 py-4">
@@ -591,25 +617,38 @@ export default function AdminFinance() {
                               {entry.paymentMethod?.replace("_", " ")}
                             </td>
                             <td className="px-6 py-4">
-                              <span className={`font-bold text-sm ${recordTab === "income" ? "text-emerald-600" : "text-red-600"}`}>
-                                {recordTab === "income" ? "+" : "-"}${entry.amount?.toLocaleString()}
+                              <span
+                                className="font-bold text-sm tabular-nums"
+                                style={{ color: recordTab === "income" ? FLOW_COLORS.in : STATUS_COLORS.critical }}
+                              >
+                                {recordTab === "income" ? "+" : "−"}{formatCurrency(entry.amount)}
                               </span>
                             </td>
                             <td className="px-6 py-4 text-right">
-                              <div className="flex items-center justify-end gap-2">
-                                <button
-                                  onClick={() => { setEditTarget(entry); setModalType(recordTab === "income" ? "income" : "expense"); }}
-                                  className="cursor-pointer p-2.5 text-stone-300 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all"
+                              {entry.invoice ? (
+                                /* Posted automatically — edit it on the invoice it came from. */
+                                <Link
+                                  to="/admin/invoices"
+                                  className="text-xs text-stone-400 hover:text-amber-600 uppercase tracking-widest"
                                 >
-                                  <Pencil size={16} />
-                                </button>
-                                <button
-                                  onClick={() => setDeleteTarget({ type: recordTab === "income" ? "income" : "expense", id: entry._id })}
-                                  className="cursor-pointer p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                                >
-                                  <Trash2 size={16} />
-                                </button>
-                              </div>
+                                  Manage on invoice
+                                </Link>
+                              ) : (
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => { setEditTarget(entry); setModalType(recordTab === "income" ? "income" : "expense"); }}
+                                    className="cursor-pointer p-2.5 text-stone-300 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all"
+                                  >
+                                    <Pencil size={16} />
+                                  </button>
+                                  <button
+                                    onClick={() => setDeleteTarget({ type: recordTab === "income" ? "income" : "expense", id: entry._id })}
+                                    className="cursor-pointer p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
+                                </div>
+                              )}
                             </td>
                           </motion.tr>
                         ))}

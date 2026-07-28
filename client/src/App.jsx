@@ -25,6 +25,9 @@ import BookingsAdmin from "./Components/Admin/Bookingsadmin";
 import ContactPage from "./Pages/ContactPage";
 import AdminContacts from "./Components/Admin/AdminContact";
 import AdminFinance from "./Components/Admin/AdminFinance";
+import AdminAnalytics from "./Components/Admin/AdminAnalytics";
+import AdminInvoices from "./Components/Admin/AdminInvoices";
+import AdminEmployees from "./Components/Admin/AdminEmployees";
 
 function App() {
   return (
@@ -53,6 +56,9 @@ function App() {
           <Route path="/admin/bookings" element={<BookingsAdmin />} />
           <Route path="/admin/contact" element={<AdminContacts />} />
           <Route path="/admin/finance" element={<AdminFinance />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
+          <Route path="/admin/invoices" element={<AdminInvoices />} />
+          <Route path="/admin/employees" element={<AdminEmployees />} />
         </Route>
 
         {/* 404 Route */}

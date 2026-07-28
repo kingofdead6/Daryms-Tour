@@ -12,6 +12,9 @@ import contactRoutes from './Routes/ContactRoutes.js';
 import expenseRoutes from './Routes/ExpenseRoutes.js';
 import incomeRoutes from './Routes/IncomeRoutes.js';
 import financeRoutes from './Routes/FinanceRoutes.js';
+import invoiceRoutes from './Routes/InvoiceRoutes.js';
+import employeeRoutes from './Routes/EmployeeRoutes.js';
+import analyticsRoutes from './Routes/AnalyticsRoutes.js';
 
 dotenv.config();
 
@@ -34,6 +37,9 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/income', incomeRoutes);
 app.use('/api/finance', financeRoutes);
+app.use('/api/invoices', invoiceRoutes);
+app.use('/api/employees', employeeRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 app.use(errorHandler);
 
