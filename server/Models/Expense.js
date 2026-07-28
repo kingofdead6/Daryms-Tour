@@ -53,6 +53,16 @@ const expenseSchema = new mongoose.Schema(
       ref: "User",
       default: null,
     },
+    // Set when the entry was posted automatically from an invoice payment.
+    invoice: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Invoice",
+      default: null,
+    },
+    invoicePayment: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+    },
   },
   { timestamps: true }
 );
